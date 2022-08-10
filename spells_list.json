@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Firebolt",
+        "damage": 6,
+        "mana_cost": 2,
+        "value": 10,
+        "quantity": 0
+    },
+    {
+        "id": 2,
+        "name": "Fireball",
+        "damage": 12,
+        "mana_cost": 4,
+        "value": 20,
+        "quantity": 0
+    },
+    {
+        "id": 3,
+        "name": "Elemental Missiles",
+        "damage": "6d6",
+        "mana_cost": 5,
+        "value": 30,
+        "quantity": 1
+    }
+]
