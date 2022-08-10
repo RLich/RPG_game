@@ -63,6 +63,12 @@ def get_item_from_inventory(file, item_id):
     return chosen_item
 
 
+def get_inventory(file):
+    inventory = open(file, "r")
+    inventory_json = json.loads(inventory.read())
+    return inventory_json
+
+
 def remove_item_from_inventory(item):
     sleep(1)
     if item["name"] == "Gold" and item["quantity"] == 1:
@@ -70,7 +76,7 @@ def remove_item_from_inventory(item):
     elif item["name"] == "Gold" and item["quantity"] > 1:
         print("Removing %s gold coins from the inventory" % item["quantity"])
     elif item["name"] != "Gold" and item["quantity"] == 1:
-        print("Removing %s %s from the inventory" % (item["quantity"], str(item["name"]) + "s)"))
+        print("Removing %s %s from the inventory" % (item["quantity"], str(item["name"]) + "s"))
     else:
         print("Removing %s %s from the inventory" % (item["quantity"], item["name"]))
     replace_item_quantity_in_inventory(item=item, action="removing")

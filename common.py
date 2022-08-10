@@ -24,13 +24,13 @@ def wait(s):
 
 items_list = [
     {
-        "id": 1,
+        "id": 0,
         "name": "Gold",
         "value": 1,
         "quantity": 10
     },
     {
-        "id": 2,
+        "id": 1,
         "name": "Health potion",
         "value": 10,
         "health_restore": 10,
@@ -69,7 +69,8 @@ weapons_list = [
     {
         "id": 1,
         "name": "Trusty knife",
-        "damage": 3
+        "damage": 3,
+        "value": 5
     }
 ]
 

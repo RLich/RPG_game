@@ -50,13 +50,13 @@ def do_item_drop_as_loot(item):
 
 
 def collect_loot(looted_gold_quantity, is_weapon, weapon, health_potions_quantity):
-    gold = inventory.get_item_from_inventory(file=inventory.file_items, item_id=1)
+    gold = inventory.get_item_from_inventory(file=inventory.file_items, item_id=0)
     gold["quantity"] = looted_gold_quantity
     if is_weapon is True:
         inventory.add_weapon_to_inventory(weapon)
     inventory.add_item_to_inventory(gold)
     if health_potions_quantity > 0:
-        health_potions = inventory.get_item_from_inventory(file=inventory.file_items, item_id=2)
+        health_potions = inventory.get_item_from_inventory(file=inventory.file_items, item_id=1)
         health_potions["quantity"] = health_potions_quantity
         inventory.add_item_to_inventory(health_potions)
 

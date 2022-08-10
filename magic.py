@@ -58,6 +58,8 @@ def choose_spell_to_cast(spellbook):
             spell_counter += 1
     chosen_spell = int(input())
     if chosen_spell in used_counters:
+        # we subtract one from the user's input because of python's indexing. User's choice of "1"
+        # is python index of "0"
         chosen_spell = available_spells_id_list[chosen_spell - 1]
         chosen_spell = get_spell_from_spellbook(spell_id=chosen_spell)
         return chosen_spell
