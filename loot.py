@@ -33,9 +33,9 @@ def generate_loot():
     if do_item_drop_as_loot(item="mana_potion") is True:
         sleep(0.5)
         mana_potions_quantity = random.choice([1, 2, 3])
-        if health_potions_quantity == 1:
+        if mana_potions_quantity == 1:
             print("   %s %s" % (mana_potions_quantity, "mana potion"))
-        elif health_potions_quantity > 1:
+        elif mana_potions_quantity > 1:
             print("   %s %s" % (mana_potions_quantity, "mana potions"))
     else:
         mana_potions_quantity = 0

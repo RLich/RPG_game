@@ -22,7 +22,8 @@ def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
           "Your HP: %s\n"
           "%s HP: %s\n" % (counter, hero_hp, enemy["name"], enemy_hp))
     sleep(0.5)
-    enemy_hp = choose_action(hero=hero, enemy=enemy, enemy_hp=enemy_hp)
+    enemy_hp = choose_action(hero=hero, hero_hp=hero_hp, enemy=enemy, enemy_hp=enemy_hp,
+                             counter=counter)
     if is_enemy_dead(enemy_hp) is True:
         loot.loot_handling_after_combat(enemy)
     else:
@@ -41,7 +42,7 @@ def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
             turn(hero, enemy, hero_hp, enemy_hp, counter)
 
 
-def choose_action(hero, enemy, enemy_hp):
+def choose_action(hero, hero_hp, enemy, enemy_hp, counter):
     sleep(0.5)
     print("Choose an action to perform:\n"
           "1) Attack with your weapon\n"
@@ -49,19 +50,19 @@ def choose_action(hero, enemy, enemy_hp):
           "3) Use an item\n"
           "4) Try to retreat(50%)")
     answer = int(input())
-    if answer == 1 or 2 or 3 or 4:
-        pass
-    else:
-        print_error_out_of_options_scope()
     if answer == 1:
         enemy_hp = do_basic_attack(attacker=hero, defender=enemy, defender_hp=enemy_hp)
+        return enemy_hp
     elif answer == 2:
         enemy_hp = cast_spell(attacker=hero, defender=enemy, defender_hp=enemy_hp)
+        return enemy_hp
     elif answer == 3:
         was_item_used = inventory.use_item(character=hero)
         while was_item_used is False:
-            choose_action(hero=hero, enemy=enemy, enemy_hp=enemy_hp)
-    else:
+            choose_action(
+                hero=hero, hero_hp=hero_hp, enemy=enemy, enemy_hp=enemy_hp, counter=counter)
+        return enemy_hp
+    elif answer == 4:
         retreat_roll = choice([1, 2])
         if retreat_roll == 1:
             sleep(1)
@@ -71,7 +72,11 @@ def choose_action(hero, enemy, enemy_hp):
             sleep(1)
             print("Retreat failed")
             pass
-    return enemy_hp
+        return enemy_hp
+    else:
+        print_error_out_of_options_scope()
+        turn(hero=hero, hero_hp=hero_hp, enemy=enemy, enemy_hp=enemy_hp, counter=counter)
+
 
 
 def enemy_choose_action():

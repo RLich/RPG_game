@@ -7,8 +7,26 @@
     },
     {
         "id": 2,
-        "name": "Long Greatsword",
+        "name": "Rusty Mace",
+        "damage": 1,
+        "value": 1
+    },
+    {
+        "id": 3,
+        "name": "Balanced Sword",
+        "damage": 12,
+        "value": 34
+    },
+    {
+        "id": 4,
+        "name": "Long Dagger",
+        "damage": 10,
+        "value": 18
+    },
+    {
+        "id": 5,
+        "name": "Sharp Greatsword",
         "damage": 7,
-        "value": 19
+        "value": 20
     }
 ]
