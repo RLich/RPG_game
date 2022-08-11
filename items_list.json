@@ -9,7 +9,14 @@
         "id": 1,
         "name": "Health potion",
         "value": 10,
-        "health_restore": 10,
+        "restore": 10,
+        "quantity": 3
+    },
+    {
+        "id": 1,
+        "name": "Mana potion",
+        "value": 10,
+        "restore": 10,
         "quantity": 3
     }
 ]

@@ -33,7 +33,14 @@ items_list = [
         "id": 1,
         "name": "Health potion",
         "value": 10,
-        "health_restore": 10,
+        "restore": 10,
+        "quantity": 3
+    },
+{
+        "id": 1,
+        "name": "Mana potion",
+        "value": 10,
+        "restore": 10,
         "quantity": 3
     }
 ]
@@ -45,7 +52,7 @@ spells_list = [
         "damage": 6,
         "mana_cost": 2,
         "value": 10,
-        "quantity": 0
+        "quantity": 1
     },
     {
         "id": 2,
@@ -61,7 +68,7 @@ spells_list = [
         "damage": "6d6",
         "mana_cost": 5,
         "value": 30,
-        "quantity": 1
+        "quantity": 0
     }
 ]
 

@@ -58,8 +58,9 @@ def choose_action(hero, enemy, enemy_hp):
     elif answer == 2:
         enemy_hp = cast_spell(attacker=hero, defender=enemy, defender_hp=enemy_hp)
     elif answer == 3:
-        print("Inventory and items not yet supported. Reverting to attack action")
-        enemy_hp = do_basic_attack(attacker=hero, defender=enemy, defender_hp=enemy_hp)
+        was_item_used = inventory.use_item(character=hero)
+        while was_item_used is False:
+            choose_action(hero=hero, enemy=enemy, enemy_hp=enemy_hp)
     else:
         retreat_roll = choice([1, 2])
         if retreat_roll == 1:

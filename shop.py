@@ -63,6 +63,7 @@ def what_to_sell(type_of_item):
     print("What kind of %s do you have?" % type_of_item)
     if type_of_item == "supply":
         items_list = inventory.get_inventory(file=common.file_items)
+        # removing gold from the list
         items_list.pop(0)
     else:
         items_list = inventory.get_inventory(file=common.file_weapons)
@@ -113,11 +114,12 @@ def what_to_sell(type_of_item):
 def shop_supplies():
     print("Here are my wares:"
           "\n1) Health potion (10g)"
-          "\n2) Back")
+          "\n2) Mana potion (10g)"
+          "\n3) Back")
     answer = int(input())
-    if answer == 1:
+    if answer == 1 or answer == 2:
         buy_something(item_id=answer, type_of_item="item")
-    elif answer == 2:
+    elif answer == 3:
         shop_buy()
     else:
         common.print_error_out_of_options_scope()

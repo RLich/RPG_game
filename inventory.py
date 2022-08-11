@@ -1,7 +1,8 @@
 import json
 from common import sleep, file_items, file_weapons
 import logging
-from common import get_object_from_json_list_by_id
+from common import get_object_from_json_list_by_id, print_error_out_of_options_scope
+from characters import change_character_stat
 
 
 def add_weapon_to_inventory(weapon):
@@ -70,15 +71,17 @@ def get_inventory(file):
 
 
 def remove_item_from_inventory(item):
+    # quantity of the item will be removed by the item["quantity"] value. Not intuitive,
+    # needs refactoring in the future
     sleep(1)
     if item["name"] == "Gold" and item["quantity"] == 1:
         print("Removing one gold coin from the inventory. You will miss it one day...")
     elif item["name"] == "Gold" and item["quantity"] > 1:
         print("Removing %s gold coins from the inventory" % item["quantity"])
     elif item["name"] != "Gold" and item["quantity"] == 1:
-        print("Removing %s %s from the inventory" % (item["quantity"], str(item["name"]) + "s"))
+        print("Removing %s %s from the inventory" % (item["quantity"], str(item["name"])))
     else:
-        print("Removing %s %s from the inventory" % (item["quantity"], item["name"]))
+        print("Removing %s %s from the inventory" % (item["quantity"], item["name"] + "s"))
     replace_item_quantity_in_inventory(item=item, action="removing")
 
 
@@ -111,3 +114,68 @@ def replace_item_quantity_in_inventory(item, action):
 def get_equipped_weapon():
     equipped_weapon = get_item_from_inventory(file=file_weapons, item_id=1)
     return equipped_weapon
+
+
+def use_item(character):
+    item = choose_item_to_use()
+    if item is False:
+        return False
+    if item["id"] == 1 and character["hp"] == character["max_hp"]:
+        print("Your health is already full")
+        use_item(character=character)
+    elif item["id"] == 1:
+        drink_potion(character, item)
+    elif item["id"] == 2 and character["mp"] == character["max_mp"]:
+        print("Your mana is already full")
+        use_item(character=character)
+
+
+def choose_item_to_use():
+    print("Pick an item to use:")
+    items_list = get_inventory(file=file_items)
+    # removing gold from the list
+    items_list.pop(0)
+    item_counter = 1
+    available_items_id_list = []
+    used_counters = []
+
+    for item in items_list:
+        if item["id"] != 0 and item["quantity"] > 0:
+            print("%s) %s" % (item_counter, item["name"]))
+            available_items_id_list.append(item["id"])
+            used_counters.append(item_counter)
+            item_counter += 1
+    back_index = int(len(items_list) + 1)
+    print("%s) Back" % back_index)
+    answer = int(input())
+    if answer in used_counters:
+        # we subtract one from the user's input because of python's indexing. User's choice of "1"
+        # is python's index of "0"
+        chosen_item_id = available_items_id_list[answer - 1]
+        chosen_item = get_item_from_inventory(file=file_items, item_id=chosen_item_id)
+        return chosen_item
+    elif answer == back_index:
+        return False
+    else:
+        print_error_out_of_options_scope()
+        choose_item_to_use()
+
+
+def drink_potion(character, item):
+    if item["id"] == 1:
+        if item["restore"] + character["hp"] > character["max_hp"]:
+            item["restore"] = character["max_hp"] - character["hp"]
+        print("Restoring %s health" % item["restore"])
+        change_character_stat(
+            character=character, stat="hp", how_much=item["restore"], action="adding")
+    else:
+        if item["restore"] + character["mp"] > character["max_mp"]:
+            item["restore"] = character["max_mp"] - character["mp"]
+        print("Restoring %s mana" % item["restore"])
+        change_character_stat(
+            character=character, stat="mp", how_much=item["restore"], action="adding")
+    # need to edit item's "quantity" -> that will determine how much of it needs to be removed
+    # I don't like it, note to self: refactor this remove_item_from_inventory function to
+    # have "how_much" parameter handled in it, not outside
+    item["quantity"] = 1
+    remove_item_from_inventory(item=item)
