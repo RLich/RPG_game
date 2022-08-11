@@ -37,7 +37,7 @@ items_list = [
         "quantity": 3
     },
 {
-        "id": 1,
+        "id": 2,
         "name": "Mana potion",
         "value": 10,
         "restore": 10,
