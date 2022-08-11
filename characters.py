@@ -34,9 +34,9 @@ def change_character_stat(character, stat, how_much, action):
             logging.debug("Replacing old %s stat %s with new item's stat %s" % (
                 character["name"], creature[stat], character[stat]))
             if action == "adding":
-                creature[stat] = creature[stat] + how_much
+                creature[stat] = int(creature[stat] + how_much)
             else:
-                creature[stat] = creature[stat] - how_much
+                creature[stat] = int(creature[stat] - how_much)
                 if creature[stat] <= 0:
                     logging.debug("Rising %s to 1, because it cannot be lower than 1" % stat)
                     creature[stat] = 1
@@ -70,3 +70,32 @@ def choose_enemy_to_encounter(stage):
                                               character_id=encountered_enemy_id)
     file.close()
     return enemy
+
+
+def regenerate_after_combat(character):
+    # Because we need an integer to calculate regeneration and we don't really care about
+    # whatever is after number's dot, we dispose of it by converting hp_to_regen to a string,
+    # cutting of the after-dot-tail and swapping back to integer before using
+    regen_rate = 0.1
+    hp_to_regen = str(character["max_hp"] * regen_rate)
+    hp_to_regen = int(hp_to_regen.split(".", 2)[0])
+    print(hp_to_regen)
+    if hp_to_regen > character["max_hp"]:
+        hp_to_regen = character["max_hp"] - character["hp"]
+    elif character["hp"] == character["max_hp"]:
+        hp_to_regen = 0
+
+    mp_to_regen = str(character["max_mp"] * regen_rate)
+    mp_to_regen = int(mp_to_regen.split(".", 2)[0])
+    print(mp_to_regen)
+    if mp_to_regen > character["max_mp"]:
+        mp_to_regen = character["max_mp"] - character["mp"]
+    elif character["mp"] == character["max_mp"]:
+        mp_to_regen = 0
+
+    if hp_to_regen > 0:
+        print("Regenerating %s hp after combat" % hp_to_regen)
+        change_character_stat(character=character, stat="hp", how_much=hp_to_regen, action="adding")
+    if mp_to_regen > 0:
+        print("Regenerating %s mp after combat" % mp_to_regen)
+        change_character_stat(character=character, stat="mp", how_much=mp_to_regen, action="adding")

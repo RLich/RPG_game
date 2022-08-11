@@ -79,9 +79,11 @@ characters_list = [
         "id": 0,
         "name": "Hero",
         "hp": 20,
+        "max_hp": 20,
         "str": 5,
         "int": 5,
-        "mp": 5
+        "mp": 10,
+        "max_mp": 10
     },
     {
         "id": 1,

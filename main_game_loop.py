@@ -1,5 +1,6 @@
 import menu
-from characters import choose_enemy_to_encounter, get_character_from_character_list, file_characters
+from characters import choose_enemy_to_encounter, get_character_from_character_list, \
+    file_characters, regenerate_after_combat
 from combat import fight
 from shop import shop_encounter
 from common import sleep, reset_all_jsons
@@ -12,6 +13,8 @@ def main_loop():
     game = 1
     while game <= game_length:
         enemy_encounter(counter=game)
+        regenerate_after_combat(character=get_character_from_character_list(file=file_characters,
+                                                                            character_id=0))
         if game == 3 or game == 6 or game == 9 or game == 12:
             shop_encounter()
         game += 1

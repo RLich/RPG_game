@@ -30,8 +30,9 @@ def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
         if enemy_action == 1:
             hp_before_enemy_attack = hero_hp
             hero_hp = do_basic_attack(attacker=enemy, defender=hero, defender_hp=hero_hp)
+            hp_to_be_removed = hp_before_enemy_attack - hero_hp
             change_character_stat(
-                character=hero, stat="hp", how_much=hero_hp - hp_before_enemy_attack,
+                character=hero, stat="hp", how_much=hp_to_be_removed,
                 action="removing")
         if is_hero_dead(hero_hp) is True:
             quit()
