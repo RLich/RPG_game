@@ -61,7 +61,7 @@ def choose_action(hero, enemy, enemy_hp):
         print("Inventory and items not yet supported. Reverting to attack action")
         enemy_hp = do_basic_attack(attacker=hero, defender=enemy, defender_hp=enemy_hp)
     else:
-        retreat_roll = choice([2])
+        retreat_roll = choice([1, 2])
         if retreat_roll == 1:
             sleep(1)
             print("Retreat successful")

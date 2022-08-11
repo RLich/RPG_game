@@ -60,12 +60,14 @@ def get_character_from_character_list(file, character_id):
 
 def choose_enemy_to_encounter(stage):
     file = open(file_characters, "r")
+    # reminder: "randrange" second argument is stop, which means it stops on the given number
+    # WITHOUT including it. So randrange(1, 4) will return 1, 2 or 3
     if stage == "early":
-        encountered_enemy_id = randrange(1, 3)
+        encountered_enemy_id = randrange(1, 4)
     elif stage == "mid":
-        encountered_enemy_id = randrange(4, 6)
+        encountered_enemy_id = randrange(4, 7)
     else:
-        encountered_enemy_id = randrange(7, 9)
+        encountered_enemy_id = randrange(7, 10)
     enemy = get_character_from_character_list(file=file_characters,
                                               character_id=encountered_enemy_id)
     file.close()
