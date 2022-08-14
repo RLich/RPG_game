@@ -5,27 +5,6 @@ from random import randrange
 from common import get_object_from_json_list_by_id, file_characters
 
 
-class Enemy:
-    def __init__(self, id, name, hp, str, int, mp, weapon_dmg):
-        self.id = id
-        self.name = name
-        self.health = hp
-        self.strength = str
-        self.intelligence = int
-        self.mana = mp
-        self.weapon_damage = weapon_dmg
-
-
-class Hero:
-    def __init__(self, id, name, hp, str, int, mp):
-        self.id = id
-        self.name = name
-        self.health = hp
-        self.strength = str
-        self.intelligence = int
-        self.mana = mp
-
-
 def change_character_stat(character, stat, how_much, action):
     file = open(file_characters, "r")
     file_content = json.loads(file.read())
