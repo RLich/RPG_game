@@ -31,8 +31,8 @@ def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
                 attacker=hero, defender=enemy, defender_hp=enemy_hp, counter=counter)
         elif action == 3:
             was_item_used = inventory.use_item(character=hero)
-            while was_item_used is False:
-                choose_action()
+            if was_item_used is False:
+                action = "pass"
         elif action == 4:
             retreat_roll = choice([1, 2])
             if retreat_roll == 1:
@@ -45,7 +45,11 @@ def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
         if is_enemy_dead(enemy_hp) is True:
             loot.loot_handling_after_combat(enemy)
             break
-        enemy_action = enemy_choose_action()
+        if action == "pass":
+            enemy_action = "pass"
+        else:
+            enemy_action = enemy_choose_action()
+            counter += 1
         if enemy_action == 1:
             hp_before_enemy_attack = hero_hp
             hero_hp = do_basic_attack(attacker=enemy, defender=hero, defender_hp=hero_hp)
@@ -55,7 +59,6 @@ def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
                 action="removing")
         if is_hero_dead(hero_hp) is True:
             quit()
-        counter += 1
 
 
 def choose_action():
