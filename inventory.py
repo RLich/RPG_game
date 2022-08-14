@@ -46,7 +46,7 @@ def add_item_to_inventory(item):
         print("Adding one gold coin to the inventory. You rich bastard...")
     elif item["name"] == "Gold" and item["quantity"] > 1:
         sleep(0.3)
-        print("Adding %s gold coins to the inventory" % str(item["quantity"]) + "s")
+        print("Adding %s gold coins to the inventory" % str(item["quantity"]))
     elif item["name"] != "Gold" and item["quantity"] == 1:
         sleep(0.3)
         print("Adding %s %s to the inventory" % (item["quantity"], item["name"]))
