@@ -5,7 +5,7 @@
         "damage": 6,
         "mana_cost": 2,
         "value": 10,
-        "quantity": 2
+        "quantity": 1
     },
     {
         "id": 2,
@@ -21,6 +21,6 @@
         "damage": "6d6",
         "mana_cost": 5,
         "value": 30,
-        "quantity": 1
+        "quantity": 0
     }
 ]

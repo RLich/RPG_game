@@ -1,50 +1,8 @@
 [
     {
-        "id": 1,
+        "id": 0,
         "name": "Trusty knife",
         "damage": 3,
         "value": 5
-    },
-    {
-        "id": 4,
-        "name": "Rusty Axe",
-        "damage": 10,
-        "value": 27
-    },
-    {
-        "id": 2,
-        "name": "Rusty Sword",
-        "damage": 6,
-        "value": 22
-    },
-    {
-        "id": 3,
-        "name": "Used Mace",
-        "damage": 5,
-        "value": 11
-    },
-    {
-        "id": 0,
-        "name": "Balanced Knife",
-        "damage": 13,
-        "value": 32
-    },
-    {
-        "id": 5,
-        "name": "Short Axe",
-        "damage": 8,
-        "value": 28
-    },
-    {
-        "id": 6,
-        "name": "Rusty Knife",
-        "damage": 1,
-        "value": 1
-    },
-    {
-        "id": 7,
-        "name": "Old Mace",
-        "damage": 1,
-        "value": 1
     }
 ]
