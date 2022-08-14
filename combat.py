@@ -42,8 +42,8 @@ def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
             else:
                 sleep(1)
                 print("Retreat failed")
-        else:
-            print_error_out_of_options_scope()
+        if is_enemy_dead(enemy_hp) is True:
+            loot.loot_handling_after_combat(enemy)
             break
         enemy_action = enemy_choose_action()
         if enemy_action == 1:
@@ -53,12 +53,9 @@ def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
             change_character_stat(
                 character=hero, stat="hp", how_much=hp_to_be_removed,
                 action="removing")
+        if is_hero_dead(hero_hp) is True:
+            quit()
         counter += 1
-
-    if is_enemy_dead(enemy_hp) is True:
-        loot.loot_handling_after_combat(enemy)
-    elif is_hero_dead(hero_hp) is True:
-        quit()
 
 
 def choose_action():
@@ -154,5 +151,3 @@ def is_enemy_dead(enemy_hp):
     if enemy_hp <= 0:
         print("Your foe is vanquished!")
         return True
-    else:
-        print("Enemy not dead yet - debugggggg")
