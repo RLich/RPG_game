@@ -43,27 +43,28 @@ def determine_game_stage(counter):
 
 
 def after_combat_break():
-    print("Combat is over. What would you like to do now?"
-          "\n1) Next fight"
-          "\n2) Use an item"
-          "\n3) Change equipped weapon"
-          "\n4) Cast a spell (not implemented yet)")
-    answer = int(input())
-    if answer == 1:
-        pass
-    elif answer == 2:
-        was_item_used = use_item(character=get_character_from_character_list(file=file_characters,
-                                                                             character_id=0))
-        if was_item_used is False:
+    while True:
+        print("Combat is over. What would you like to do now?"
+              "\n1) Next fight"
+              "\n2) Use an item"
+              "\n3) Change equipped weapon"
+              "\n4) Cast a spell (not implemented yet)")
+        answer = int(input())
+        if answer == 1:
+            break
+        elif answer == 2:
+            was_item_used = use_item(character=get_character_from_character_list(
+                file=file_characters, character_id=0))
+            if was_item_used is False:
+                after_combat_break()
+        elif answer == 3:
+            change_equipped_weapon()
+        elif answer == 4:
+            print("I've told you it's not implemented yet :) You will fight a monster instead")
+            break
+        else:
+            print_error_out_of_options_scope()
             after_combat_break()
-    elif answer == 3:
-        change_equipped_weapon()
-    elif answer == 4:
-        print("I've told you it's not implemented yet :) You will fight a monster instead")
-        pass
-    else:
-        print_error_out_of_options_scope()
-        after_combat_break()
 
 
 main_loop()

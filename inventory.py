@@ -148,6 +148,8 @@ def change_equipped_weapon():
         chosen_weapon = get_item_from_inventory(file=file_weapons, item_id=chosen_weapon_id)
         swap_weapons_id(item_1=chosen_weapon, item_2=equipped_weapon)
         print("You now use %s (%s damage)" % (chosen_weapon["name"], chosen_weapon["damage"]))
+    elif answer == len(used_counters) + 1:
+        pass
     else:
         print_error_out_of_options_scope()
         change_equipped_weapon()
