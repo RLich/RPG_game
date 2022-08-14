@@ -100,10 +100,11 @@ def what_to_sell(type_of_item):
             quantity = 1
         else:
             quantity = how_many_items(item=chosen_item, action="selling", type_of_item=type_of_item)
+        print(chosen_item)
         sell_something(
             item=chosen_item,
             how_many=quantity,
-            type_of_item="supply"
+            type_of_item=type_of_item
         )
     elif answer == back_index:
         shop_sell()
