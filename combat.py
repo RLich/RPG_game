@@ -66,7 +66,7 @@ def choose_action():
               "2) Cast a spell\n"
               "3) Use an item\n"
               "4) Try to retreat(50%)")
-        answer = int(input())
+        answer = int(input(">"))
         if answer in [1, 2, 3, 4]:
             return answer
         else:

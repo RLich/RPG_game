@@ -2,7 +2,7 @@
     {
         "id": 0,
         "name": "Hero",
-        "hp": 8,
+        "hp": 20,
         "max_hp": 20,
         "str": 5,
         "int": 5,

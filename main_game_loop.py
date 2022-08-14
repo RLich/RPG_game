@@ -49,7 +49,7 @@ def after_combat_break():
               "\n2) Use an item"
               "\n3) Change equipped weapon"
               "\n4) Cast a spell (not implemented yet)")
-        answer = int(input())
+        answer = int(input(">"))
         if answer == 1:
             break
         elif answer == 2:

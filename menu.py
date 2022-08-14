@@ -16,7 +16,7 @@ def welcome_message():
 
 
 def main_menu_options():
-    answer = int(input())
+    answer = int(input(">"))
     if answer == 1:
         print("A new adventure begins")
     elif answer == 2:

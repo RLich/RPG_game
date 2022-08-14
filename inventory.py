@@ -137,7 +137,8 @@ def change_equipped_weapon():
         used_counters.append(weapon_counter)
         weapon_counter += 1
     print("%s) Back" % weapon_counter)
-    answer = int(input("What weapon would you like to equip?"))
+    print("What weapon would you like to equip?")
+    answer = int(input(">"))
     if answer == 1:
         print("That is your current weapon")
         change_equipped_weapon()
@@ -203,7 +204,7 @@ def choose_item_to_use():
             item_counter += 1
     back_index = int(len(items_list) + 1)
     print("%s) Back" % back_index)
-    answer = int(input())
+    answer = int(input(">"))
     if answer in used_counters:
         # we subtract one from the user's input because of python's indexing. User's choice of "1"
         # is python's index of "0"

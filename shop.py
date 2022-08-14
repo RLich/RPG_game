@@ -21,7 +21,7 @@ def shop_encounter():
 def shop_welcome():
     print(
         "Welcome to my store, stranger. Would you like to buy or sell?\n1) Buy\n2) Sell\n3) Leave")
-    answer_1 = int(input())
+    answer_1 = int(input(">"))
     if answer_1 > 3:
         common.print_error_out_of_options_scope()
         shop_encounter()
@@ -31,7 +31,7 @@ def shop_welcome():
 def shop_buy():
     print("What can I interest you with?")
     print("1) Supplies\n2) Weapons\n3) Spells\n4) Back")
-    answer = int(input())
+    answer = int(input(">"))
     if answer == 1:
         shop_supplies()
     elif answer == 2:
@@ -48,7 +48,7 @@ def shop_buy():
 def shop_sell():
     print("What would you like to sell?"
           "\n1) Supplies\n2) Weapons\n3) Back")
-    answer = int(input())
+    answer = int(input(">"))
     if answer == 1:
         what_to_sell(type_of_item="supply")
     elif answer == 2:
@@ -81,7 +81,7 @@ def what_to_sell(type_of_item):
         item_counter += 1
     back_index = int(len(items_list) + 1)
     print("%s) Back" % back_index)
-    answer = int(input())
+    answer = int(input(">"))
     if answer in used_counters:
         # we subtract one from the user's input because of python's indexing. User's choice of "1"
         # is python's index of "0"
@@ -118,7 +118,7 @@ def shop_supplies():
           "\n1) Health potion (10g)"
           "\n2) Mana potion (10g)"
           "\n3) Back")
-    answer = int(input())
+    answer = int(input(">"))
     if answer == 1 or answer == 2:
         buy_something(item_id=answer, type_of_item="item")
     elif answer == 3:
@@ -137,7 +137,7 @@ def shop_spells():
                                                       spell["damage"], spell["value"]))
         print_counter += 1
     print("%s) Back" % print_counter)
-    answer = int(input())
+    answer = int(input(">"))
     if answer < print_counter:
         spell = magic.get_spell_from_spellbook(spell_id=answer)
         if spell["quantity"] == 1:
@@ -158,7 +158,7 @@ def shop_weapons():
 
 def how_many_items(item, action, type_of_item):
     print("How many of those?")
-    answer = int(input())
+    answer = int(input(">"))
     if answer <= 0:
         print("Very funny. Anything else?")
         shop_encounter()
