@@ -230,9 +230,11 @@ def sell_something(item, how_many, type_of_item):
     inventory.add_item_to_inventory(item=gold)
     if type_of_item == "weapon":
         inventory.remove_weapon_from_inventory(weapon=item)
+        shop_sell()
     elif type_of_item == "supply":
         item["quantity"] = how_many
         inventory.remove_item_from_inventory(item=item)
+        shop_sell()
 
 
 def check_if_player_has_enough_gold(available_gold, price, quantity):

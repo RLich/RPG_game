@@ -44,8 +44,8 @@ def determine_game_stage(counter):
 
 def after_combat_break():
     while True:
-        print("Combat is over. What would you like to do now?"
-              "\n1) Next fight"
+        print("\nYou are resting in a quiet place. What would you like to do now?"
+              "\n1) Continue with your journey"
               "\n2) Use an item"
               "\n3) Change equipped weapon"
               "\n4) Cast a spell (not implemented yet)")
