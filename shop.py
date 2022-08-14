@@ -128,15 +128,22 @@ def shop_supplies():
 
 
 def shop_spells():
-    print("Here are my wares:"
-          "\n1) Firebolt (10g)"
-          "\n2) Fireball (20g)"
-          "\n3) Elemental Missiles (30g)"
-          "\n4) Back")
+    spellbook = magic.get_spellbook()
+    print("Here are my wares:")
+    print_counter = 1
+    for spell in spellbook:
+        print("%s) %s (%s damage, price: %s gold)" % (print_counter, spell["name"],
+                                                      spell["damage"], spell["value"]))
+        print_counter += 1
+    print("%s) Back" % print_counter)
     answer = int(input())
-    if answer in [1, 2, 3]:
+    if answer < print_counter:
+        spell = magic.get_spell_from_spellbook(spell_id=answer)
+        if spell["quantity"] == 1:
+            print("You already have this spell")
+            shop_spells()
         buy_something(item_id=answer, type_of_item="spell")
-    elif answer == 4:
+    elif answer == print_counter:
         shop_buy()
     else:
         common.print_error_out_of_options_scope()
