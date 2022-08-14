@@ -54,7 +54,7 @@ def choose_action(hero, hero_hp, enemy, enemy_hp, counter):
         enemy_hp = do_basic_attack(attacker=hero, defender=enemy, defender_hp=enemy_hp)
         return enemy_hp
     elif answer == 2:
-        enemy_hp = cast_spell(attacker=hero, defender=enemy, defender_hp=enemy_hp)
+        enemy_hp = cast_spell(attacker=hero, defender=enemy, defender_hp=enemy_hp, counter=counter)
         return enemy_hp
     elif answer == 3:
         was_item_used = inventory.use_item(character=hero)
@@ -78,18 +78,18 @@ def choose_action(hero, hero_hp, enemy, enemy_hp, counter):
         turn(hero=hero, hero_hp=hero_hp, enemy=enemy, enemy_hp=enemy_hp, counter=counter)
 
 
-
 def enemy_choose_action():
     sleep(1)
     print("Enemy performs an attack")
     return 1
 
 
-def cast_spell(attacker, defender, defender_hp):
+def cast_spell(attacker, defender, defender_hp, counter):
     spell = magic.choose_spell_to_cast(spellbook=magic.get_spellbook())
     spend_mana = magic.spend_mana_to_cast_spell(caster=attacker, spell=spell)
     if spend_mana is False and attacker["name"] == "Hero":
-        defender_hp = choose_action(hero=attacker, enemy=defender, enemy_hp=defender_hp)
+        defender_hp = choose_action(hero=attacker, hero_hp=attacker["health"], enemy=defender,
+                                    enemy_hp=defender_hp, counter=counter)
         return defender_hp
     elif spend_mana is not False and attacker["name"] != "Hero":
         enemy_choose_action()
@@ -103,8 +103,9 @@ def cast_spell(attacker, defender, defender_hp):
 
 
 def calculate_spell_damage(attacker, spell):
+    roll = choice([1, 2, 3, 4, 5, 6])
     if isinstance(spell["damage"], int) is True:
-        damage = attacker["int"] + spell["damage"]
+        damage = attacker["int"] + spell["damage"] + roll
     else:
         damage_string_split = spell["damage"].split("d")
         damage_range_list = []
@@ -112,8 +113,8 @@ def calculate_spell_damage(attacker, spell):
         while counter <= int(damage_string_split[1]):
             damage_range_list.append(counter)
             counter += 1
-        roll = choice(damage_range_list)
-        spell_damage_roll = int(damage_string_split[0]) * int(roll)
+        additional_roll = choice(damage_range_list)
+        spell_damage_roll = int(damage_string_split[0]) * int(additional_roll + roll)
         damage = attacker["int"] + spell_damage_roll
     return damage
 

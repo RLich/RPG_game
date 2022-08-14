@@ -11,7 +11,7 @@ def welcome_message():
     print("Welcome to the game!\n"
           "Select the number from the list to proceed:\n"
           "1) Start a new adventure\n"
-          "2) Continue from the save file\n"
+          "2) Continue from the save file (not implemented yet)\n"
           "3) Exit")
 
 

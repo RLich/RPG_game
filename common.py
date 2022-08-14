@@ -74,7 +74,7 @@ spells_list = [
 
 weapons_list = [
     {
-        "id": 1,
+        "id": 0,
         "name": "Trusty knife",
         "damage": 3,
         "value": 5

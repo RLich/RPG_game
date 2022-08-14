@@ -4,7 +4,7 @@ from characters import choose_enemy_to_encounter, get_character_from_character_l
 from combat import fight
 from shop import shop_encounter
 from common import sleep, reset_all_jsons, print_error_out_of_options_scope
-from inventory import use_item
+from inventory import use_item, change_equipped_weapon
 
 
 def main_loop():
@@ -46,7 +46,8 @@ def after_combat_break():
     print("Combat is over. What would you like to do now?"
           "\n1) Next fight"
           "\n2) Use an item"
-          "\n3) Cast a spell (not implemented yet)")
+          "\n3) Change equipped weapon"
+          "\n4) Cast a spell (not implemented yet)")
     answer = int(input())
     if answer == 1:
         pass
@@ -56,6 +57,8 @@ def after_combat_break():
         if was_item_used is False:
             after_combat_break()
     elif answer == 3:
+        change_equipped_weapon()
+    elif answer == 4:
         print("I've told you it's not implemented yet :) You will fight a monster instead")
         pass
     else:

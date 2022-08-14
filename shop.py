@@ -1,6 +1,7 @@
 import common
 import inventory
 import magic
+import logging
 
 
 def shop_encounter():
@@ -213,12 +214,12 @@ def buy_something(item_id, type_of_item):
 
 
 def sell_something(item, how_many, type_of_item):
-    print("How many: %s" % how_many)
+    logging.debug("How many: %s" % how_many)
     gold = inventory.get_item_from_inventory(file=inventory.file_items, item_id=0)
     gold["quantity"] = int(item["value"] * how_many)
-    print("Value:%s" % item["value"])
-    print("How many items: %s" % how_many)
-    print("How much gold to add: %s" % gold["quantity"])
+    logging.debug("Value:%s" % item["value"])
+    logging.debug("How many items: %s" % how_many)
+    logging.debug("How much gold to add: %s" % gold["quantity"])
     inventory.add_item_to_inventory(item=gold)
     if type_of_item == "weapon":
         inventory.remove_weapon_from_inventory(weapon=item)

@@ -8,8 +8,8 @@ from characters import change_character_stat
 def add_weapon_to_inventory(weapon):
     weapon = vars(weapon)
     sleep(1)
-    print("Adding a new item to the inventory:\nName: %s\nDamage: %s\n" % (weapon["name"],
-                                                                           weapon["damage"]))
+    print("Adding a new item to the inventory:\n%s (damage: %s)\n" % (weapon["name"],
+                                                                      weapon["damage"]))
     file = open(file_weapons, "r")
     file_content = json.loads(file.read())
     dict_list = file_content
@@ -53,7 +53,7 @@ def add_item_to_inventory(item):
     else:
         sleep(0.3)
         print("Adding %s %s to the inventory" % (item["quantity"], item["name"]))
-    replace_item_quantity_in_inventory(item=item, action="adding")
+    replace_item_key_value_in_inventory(item=item, key="quantity", action="adding")
 
 
 def get_item_from_inventory(file, item_id):
@@ -82,20 +82,23 @@ def remove_item_from_inventory(item):
         print("Removing %s %s from the inventory" % (item["quantity"], str(item["name"])))
     else:
         print("Removing %s %s from the inventory" % (item["quantity"], item["name"] + "s"))
-    replace_item_quantity_in_inventory(item=item, action="removing")
+    replace_item_key_value_in_inventory(item=item, key="quantity", action="removing")
 
 
-def replace_item_quantity_in_inventory(item, action):
+def replace_item_key_value_in_inventory(item, key, action):
     file = open(file_items, "r")
     file_content = json.loads(file.read())
     for object in file_content:
         if object["id"] == item["id"]:
-            logging.debug("Replacing old item's quantity %s with new item's quantity %s" % (
-                object["quantity"], item["quantity"]))
+            logging.debug("Replacing old item's %s %s with new item's quantity %s" % (
+                object[key], key, item[key]))
             if action == "adding":
-                object["quantity"] = object["quantity"] + item["quantity"]
+                object[key] = object[key] + item[key]
+            elif action == "replacing":
+                # edit object's key before calling this function
+                object[key] = item["key"]
             else:
-                object["quantity"] = object["quantity"] - item["quantity"]
+                object[key] = object[key] - item[key]
     dict_list = file_content
     file_content = json.dumps(dict_list, indent=4)
     file.close()
@@ -112,8 +115,59 @@ def replace_item_quantity_in_inventory(item, action):
 
 
 def get_equipped_weapon():
-    equipped_weapon = get_item_from_inventory(file=file_weapons, item_id=1)
+    # Equipped weapon should have ID of "0"
+    equipped_weapon = get_item_from_inventory(file=file_weapons, item_id=0)
     return equipped_weapon
+
+
+def change_equipped_weapon():
+    # To change weapon into equipped weapon, swap it's ID with the current equipped weapon
+    equipped_weapon = get_equipped_weapon()
+    print("Currently you use: %s (%s damage)" %
+          (equipped_weapon["name"], equipped_weapon["damage"]))
+    print("Available weapons to equip:")
+    weapons_list = get_inventory(file=file_weapons)
+    weapon_counter = 1
+    available_weapons_id_list = []
+    used_counters = []
+
+    for weapon in weapons_list:
+        print("%s) %s (%s)" % (weapon_counter, weapon["name"], weapon["damage"]))
+        available_weapons_id_list.append(weapon["id"])
+        used_counters.append(weapon_counter)
+        weapon_counter += 1
+    print("%s) Back" % weapon_counter)
+    answer = int(input("What weapon would you like to equip?"))
+    if answer == 1:
+        print("That is your current weapon")
+        change_equipped_weapon()
+    elif answer in used_counters:
+        # we subtract one from the user's input because of python's indexing. User's choice of "1"
+        # is python's index of "0"
+        chosen_weapon_id = available_weapons_id_list[answer - 1]
+        chosen_weapon = get_item_from_inventory(file=file_weapons, item_id=chosen_weapon_id)
+        swap_weapons_id(item_1=chosen_weapon, item_2=equipped_weapon)
+        print("You now use %s (%s damage)" % (chosen_weapon["name"], chosen_weapon["damage"]))
+    else:
+        print_error_out_of_options_scope()
+        change_equipped_weapon()
+
+
+def swap_weapons_id(item_1, item_2, key="id"):
+    file = open(file_weapons, "r")
+    file_content = json.loads(file.read())
+    for object in file_content:
+        if object["id"] == item_2["id"]:
+            object[key] = item_1[key]
+        elif object["id"] == item_1["id"]:
+            object[key] = item_2["id"]
+    dict_list = file_content
+    file_content = json.dumps(dict_list, indent=4)
+    file.close()
+
+    file = open(file_weapons, "w")
+    file.write(file_content)
+    file.close()
 
 
 def use_item(character):

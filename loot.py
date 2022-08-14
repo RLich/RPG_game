@@ -7,7 +7,7 @@ from common import sleep
 def generate_loot():
     # loot list: gold, weapon, health_potions, mana_potions
     loot = []
-    loot_gold = random.randrange(1, 100)
+    loot_gold = random.randrange(1, 50)
     loot.append(loot_gold)
     if loot_gold == 1:
         print("You have found:\n   %s gold coin" % loot_gold)
@@ -46,13 +46,13 @@ def do_item_drop_as_loot(item):
     # determine if an item ("weapon" / "health_potion" / "mana_potion") dropped as a loot
     item_drop_roll = random.randrange(1, 10)
     if item == "weapon":
-        if item_drop_roll >= 1:
+        if item_drop_roll >= 6:
             return True
     elif item == "health_potion":
-        if item_drop_roll >= 1:
+        if item_drop_roll >= 4:
             return True
     elif item == "mana_potion":
-        if item_drop_roll >= 1:
+        if item_drop_roll >= 4:
             return True
 
 
