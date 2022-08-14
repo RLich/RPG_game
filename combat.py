@@ -43,16 +43,18 @@ def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
                 sleep(1)
                 print("Retreat failed")
         else:
-            enemy_action = enemy_choose_action()
-            if enemy_action == 1:
-                hp_before_enemy_attack = hero_hp
-                hero_hp = do_basic_attack(attacker=enemy, defender=hero, defender_hp=hero_hp)
-                hp_to_be_removed = hp_before_enemy_attack - hero_hp
-                change_character_stat(
-                    character=hero, stat="hp", how_much=hp_to_be_removed,
-                    action="removing")
-            else:
-                counter += 1
+            print_error_out_of_options_scope()
+            break
+        enemy_action = enemy_choose_action()
+        if enemy_action == 1:
+            hp_before_enemy_attack = hero_hp
+            hero_hp = do_basic_attack(attacker=enemy, defender=hero, defender_hp=hero_hp)
+            hp_to_be_removed = hp_before_enemy_attack - hero_hp
+            change_character_stat(
+                character=hero, stat="hp", how_much=hp_to_be_removed,
+                action="removing")
+        counter += 1
+
     if is_enemy_dead(enemy_hp) is True:
         loot.loot_handling_after_combat(enemy)
     elif is_hero_dead(hero_hp) is True:
