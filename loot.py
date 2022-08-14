@@ -78,10 +78,13 @@ def loot_handling_after_combat(enemy):
     print("%s dropped some loot" % enemy["name"])
     loot = generate_loot()
     gold = loot[0][0]
-    weapon = loot[0][1]
     health_potions_quantity = loot[2]
     mana_potions_quantity = loot[3]
     does_loot_contain_weapon = loot[1]
+    if does_loot_contain_weapon is True:
+        weapon = loot[0][1]
+    else:
+        weapon = False
     collect_loot(looted_gold_quantity=gold, is_weapon=does_loot_contain_weapon, weapon=weapon,
                  health_potions_quantity=health_potions_quantity,
                  mana_potions_quantity=mana_potions_quantity)

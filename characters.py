@@ -60,7 +60,6 @@ def regenerate_after_combat(character):
     regen_rate = 0.1
     hp_to_regen = str(character["max_hp"] * regen_rate)
     hp_to_regen = int(hp_to_regen.split(".", 2)[0])
-    print(hp_to_regen)
     if hp_to_regen > character["max_hp"]:
         hp_to_regen = character["max_hp"] - character["hp"]
     elif character["hp"] == character["max_hp"]:
@@ -68,7 +67,6 @@ def regenerate_after_combat(character):
 
     mp_to_regen = str(character["max_mp"] * regen_rate)
     mp_to_regen = int(mp_to_regen.split(".", 2)[0])
-    print(mp_to_regen)
     if mp_to_regen > character["max_mp"]:
         mp_to_regen = character["max_mp"] - character["mp"]
     elif character["mp"] == character["max_mp"]:
