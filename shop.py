@@ -11,7 +11,9 @@ def shop_encounter():
     elif answer_1 == 2:
         shop_sell()
     elif answer_1 == 3:
-        pass
+        common.sleep(0.5)
+        print("\nLeaving the store\n")
+        common.sleep(0.5)
         # leave
     else:
         common.print_error_out_of_options_scope()
@@ -74,6 +76,9 @@ def what_to_sell(type_of_item):
     for item in items_list:
         if type_of_item == "supply" and item["quantity"] > 0:
             print("%s) %s (%s gold)" % (item_counter, item["name"], item["value"]))
+        elif type_of_item == "weapon":
+            print("%s) %s (%s damage, price: %s gold" % (item_counter, item["name"],
+                                                         item["damage"], item["value"]))
         else:
             print("%s) %s (%s gold)" % (item_counter, item["name"], item["value"]))
         available_items_id_list.append(item["id"])
@@ -100,7 +105,6 @@ def what_to_sell(type_of_item):
             quantity = 1
         else:
             quantity = how_many_items(item=chosen_item, action="selling", type_of_item=type_of_item)
-        print(chosen_item)
         sell_something(
             item=chosen_item,
             how_many=quantity,
@@ -214,7 +218,7 @@ def buy_something(item_id, type_of_item):
         inventory.add_weapon_to_inventory(weapon=item)
     elif gold_check is False:
         print("Not enough gold. Want to buy something else?")
-        shop_supplies()
+        shop_buy()
     else:
         inventory.remove_item_from_inventory(item=gold)
         inventory.add_item_to_inventory(item)
