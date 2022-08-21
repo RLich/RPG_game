@@ -5,6 +5,7 @@ import inventory
 import loot
 import logging
 import magic
+from colorama import Fore, Style
 
 
 def fight(hero, enemy):
@@ -95,7 +96,9 @@ def cast_spell(attacker, defender, defender_hp, counter):
         damage = calculate_spell_damage(attacker=attacker, spell=spell)
         defender_hp = defender_hp - damage
         sleep(1)
-        print("%s dealt %s magic damage to %s" % (attacker["name"], damage, defender["name"]))
+        print(Style.BRIGHT + "%s" % attacker["name"] + Style.RESET_ALL + " dealt " +
+              Fore.BLUE + "%s magic damage " % damage +
+              Style.RESET_ALL + "to " + Style.BRIGHT + "%s" % defender["name"] + Style.RESET_ALL)
         return defender_hp
 
 
@@ -120,7 +123,9 @@ def do_basic_attack(attacker, defender, defender_hp):
     damage = calculate_damage(attacker=attacker)
     defender_hp = defender_hp - damage
     sleep(1)
-    print("%s dealt %s damage to %s" % (attacker["name"], damage, defender["name"]))
+    print(Style.BRIGHT + "%s" % attacker["name"] + Style.RESET_ALL + " dealt " + Fore.RED +
+          "%s physical damage " % damage + Style.RESET_ALL + "to " + Style.BRIGHT + "%s" %
+          defender["name"] + Style.RESET_ALL)
     return defender_hp
 
 
@@ -130,7 +135,6 @@ def calculate_damage(attacker):
         weapon_damage = equipped_weapon["damage"]
         print("You are attacking with %s" % equipped_weapon["name"])
         sleep(1)
-        print("Weapon's damage: %s" % weapon_damage)
     else:
         weapon_damage = attacker["weapon_dmg"]
     armor = 0
@@ -152,5 +156,5 @@ def is_hero_dead(hero_hp):
 
 def is_enemy_dead(enemy_hp):
     if enemy_hp <= 0:
-        print("Your foe is vanquished!")
+        print("\nYour foe is vanquished!\n")
         return True

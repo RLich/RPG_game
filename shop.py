@@ -264,4 +264,3 @@ def check_if_player_has_enough_gold(available_gold, price, quantity):
         return True
     else:
         return False
-shop_encounter()
