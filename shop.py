@@ -2,6 +2,7 @@ import common
 import inventory
 import magic
 import logging
+from items import populate_weapons_shop_list, clear_weapons_shop_list_json, assign_free_id
 
 
 def shop_encounter():
@@ -124,7 +125,8 @@ def shop_supplies():
           "\n3) Back")
     answer = int(input(">"))
     if answer == 1 or answer == 2:
-        buy_something(item_id=answer, type_of_item="item")
+        item = inventory.get_item_from_inventory(file=common.file_items, item_id=answer)
+        buy_something(item=item, type_of_item="item")
     elif answer == 3:
         shop_buy()
     else:
@@ -147,7 +149,8 @@ def shop_spells():
         if spell["quantity"] == 1:
             print("You already have this spell")
             shop_spells()
-        buy_something(item_id=answer, type_of_item="spell")
+        else:
+            buy_something(item=spell, type_of_item="spell")
     elif answer == print_counter:
         shop_buy()
     else:
@@ -156,8 +159,26 @@ def shop_spells():
 
 
 def shop_weapons():
-    # create a temp list of weapons to choose from
-    pass
+    populate_weapons_shop_list()
+    weapons_for_sale = inventory.get_inventory(file=common.file_shop_weapons)
+    print("This is what I've got:")
+    for weapon in weapons_for_sale:
+        print("%s) %s (damage: %s, price: %s)" % (weapon["id"], weapon["name"], weapon["damage"],
+                                                  weapon["value"]))
+    print("%s) Back" % (len(weapons_for_sale) + 1))
+    answer = int(input())
+    if answer in range(1, 6):
+        chosen_weapon = weapons_for_sale[answer - 1] # deducting one because indexing starts from 0
+        free_id = assign_free_id()
+        chosen_weapon["id"] = free_id
+        logging.debug("Assigning a new ID to the chosen weapon. New ID: %s" % free_id)
+        clear_weapons_shop_list_json()
+        buy_something(item=chosen_weapon, type_of_item="weapon")
+    elif answer == 6:
+        shop_buy()
+    else:
+        common.print_error_out_of_options_scope()
+        shop_weapons()
 
 
 def how_many_items(item, action, type_of_item):
@@ -192,15 +213,9 @@ def check_if_player_has_enough_items(item, how_many, type_of_item):
         return False
 
 
-def buy_something(item_id, type_of_item):
-    if type_of_item == "item":
-        item = inventory.get_item_from_inventory(file=inventory.file_items, item_id=item_id)
-    elif type_of_item == "weapon":
-        item = inventory.get_item_from_inventory(file=inventory.file_weapons, item_id=item_id)
-    else:
-        item = magic.get_spell_from_spellbook(spell_id=item_id)
+def buy_something(item, type_of_item):
     gold = inventory.get_item_from_inventory(file=inventory.file_items, item_id=0)
-    if type_of_item == "spell":
+    if type_of_item == "spell" or type_of_item == "weapon":
         quantity = 1
         item["quantity"] = quantity
     else:
@@ -208,14 +223,15 @@ def buy_something(item_id, type_of_item):
         item["quantity"] = quantity
     gold_check = check_if_player_has_enough_gold(gold["quantity"], price=item["value"],
                                                  quantity=quantity)
-    gold["quantity"] = item["value"]
+    gold["quantity"] = (item["value"] * quantity)
     if gold_check is True and type_of_item == "spell":
         inventory.remove_item_from_inventory(item=gold)
         magic.add_spell_to_spellbook(item)
         shop_buy()
     elif gold_check is True and type_of_item == "weapon":
         inventory.remove_item_from_inventory(item=gold)
-        inventory.add_weapon_to_inventory(weapon=item)
+        inventory.add_weapon_to_inventory(weapon=item, is_from_shop=True)
+        shop_buy()
     elif gold_check is False:
         print("Not enough gold. Want to buy something else?")
         shop_buy()
@@ -248,3 +264,4 @@ def check_if_player_has_enough_gold(available_gold, price, quantity):
         return True
     else:
         return False
+shop_encounter()

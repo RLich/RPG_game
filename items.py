@@ -2,7 +2,7 @@ from random import choice, randrange
 from inventory import file_weapons
 import json
 import logging
-import inventory
+from common import file_shop_weapons
 
 
 class Weapon:
@@ -81,7 +81,8 @@ def get_weapon_id_list():
     return weapon_ids
 
 
-def assign_free_id(weapon_ids):
+def assign_free_id():
+    weapon_ids = get_weapon_id_list()
     id_candidate = 1
     logging.debug("id_candidate: %s" % id_candidate)
     length_of_weapon_ids = len(weapon_ids)
@@ -104,8 +105,7 @@ def generate_weapon_value(damage):
 
 
 def create_weapon():
-    weapon_ids = get_weapon_id_list()
-    free_id = assign_free_id(weapon_ids)
+    free_id = assign_free_id()
     name = weapon_name_generator()
     weapon_adj_mod = weapon_damage_generator_adjective(name[1])
     weapon_type_mod = weapon_damage_generator_type(name[2])
@@ -118,13 +118,26 @@ def create_weapon():
         dmg=damage,
         value=generate_weapon_value(damage=damage)
     )
-    weapon_ids.append(weapon.id)
     return weapon
 
 
-def test_weapon_generation():
-    x = 0
-    while x < 2:
-        create_weapon()
-        print("")
-        x += 1
+def populate_weapons_shop_list():
+    shop_weapons_list = []
+    for number in range(1, 6):
+        weapon = vars(create_weapon())
+        weapon["id"] = number
+        shop_weapons_list.append(weapon)
+    append_weapons_list_to_json_file(shop_weapons_list)
+
+
+def append_weapons_list_to_json_file(shop_weapons_list):
+    file_content = json.dumps(shop_weapons_list, indent=4)
+    with open(file_shop_weapons, "w") as outfile:
+        outfile.write(file_content)
+
+
+def clear_weapons_shop_list_json():
+    logging.debug('Clearing the "weapons_shop_list.json" file')
+    file = file_shop_weapons
+    weapons_shop_list = open(file, "w")
+    weapons_shop_list.close()

@@ -2,12 +2,14 @@ from time import sleep
 import os
 from json import dumps
 import logging
+from colorama import Fore, Style
 
 working_dir = os.getcwd()
 
 
 def print_error_out_of_options_scope():
-    print("Please choose a number within given options")
+    print(Fore.RED + "\nPlease choose a number within given options\n")
+    print(Style.RESET_ALL)
 
 
 def get_object_from_json_list_by_id(data, object_id):
@@ -179,6 +181,7 @@ file_characters = working_dir + "\\characters_list.json"
 file_spells = working_dir + "\\spells_list.json"
 file_weapons = working_dir + "\\weapons_list.json"
 file_items = working_dir + "\\items_list.json"
+file_shop_weapons = working_dir + "\\weapons_shop_list.json"
 
 
 def reset_all_jsons():

@@ -3,14 +3,14 @@
         "id": 0,
         "name": "Gold",
         "value": 1,
-        "quantity": 10
+        "quantity": 80
     },
     {
         "id": 1,
         "name": "Health potion",
         "value": 10,
         "restore": 10,
-        "quantity": 3
+        "quantity": 13
     },
     {
         "id": 2,

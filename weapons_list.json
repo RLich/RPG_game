@@ -4,5 +4,19 @@
         "name": "Trusty knife",
         "damage": 3,
         "value": 5
+    },
+    {
+        "id": 1,
+        "name": "Balanced Knife",
+        "damage": 11,
+        "value": 29,
+        "quantity": 1
+    },
+    {
+        "id": 2,
+        "name": "Long Dagger",
+        "damage": 4,
+        "value": 9,
+        "quantity": 1
     }
 ]

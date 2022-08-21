@@ -1,15 +1,18 @@
 import json
-from common import sleep, file_items, file_weapons
 import logging
-from common import get_object_from_json_list_by_id, print_error_out_of_options_scope
+from common import get_object_from_json_list_by_id, print_error_out_of_options_scope, sleep, \
+    file_items, file_weapons
 from characters import change_character_stat
 
 
-def add_weapon_to_inventory(weapon):
-    weapon = vars(weapon)
+def add_weapon_to_inventory(weapon, is_from_shop):
+    if is_from_shop is True:
+        pass
+    else:
+        weapon = vars(weapon)
     sleep(1)
-    print("Adding a new item to the inventory:\n%s (damage: %s)\n" % (weapon["name"],
-                                                                      weapon["damage"]))
+    print("Adding a new weapon to the inventory:\n%s (damage: %s)\n" % (weapon["name"],
+                                                                        weapon["damage"]))
     file = open(file_weapons, "r")
     file_content = json.loads(file.read())
     dict_list = file_content
@@ -20,7 +23,6 @@ def add_weapon_to_inventory(weapon):
 
     with open(file_weapons, "w") as outfile:
         outfile.write(file_content)
-    file.close()
 
 
 def remove_weapon_from_inventory(weapon):
@@ -36,7 +38,6 @@ def remove_weapon_from_inventory(weapon):
 
     with open(file_weapons, "w") as outfile:
         outfile.write(file_content)
-    file.close()
 
 
 def add_item_to_inventory(item):
@@ -204,8 +205,6 @@ def choose_item_to_use():
             available_items_id_list.append(item["id"])
             used_counters.append(item_counter)
             item_counter += 1
-            print(used_counters)
-            print(item_counter)
     back_index = int(len(items_list) + 1)
     print("%s) Back" % back_index)
     answer = int(input(">"))

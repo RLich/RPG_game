@@ -61,7 +61,7 @@ def collect_loot(looted_gold_quantity, is_weapon, weapon, health_potions_quantit
     gold = inventory.get_item_from_inventory(file=inventory.file_items, item_id=0)
     gold["quantity"] = looted_gold_quantity
     if is_weapon is True:
-        inventory.add_weapon_to_inventory(weapon)
+        inventory.add_weapon_to_inventory(weapon, is_from_shop=False)
     inventory.add_item_to_inventory(gold)
     if health_potions_quantity > 0:
         health_potions = inventory.get_item_from_inventory(file=inventory.file_items, item_id=1)
