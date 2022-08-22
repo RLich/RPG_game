@@ -20,10 +20,9 @@ def fight(hero, enemy):
 
 def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
     while hero_hp >= 1 and enemy_hp >= 1:
-        sleep(1)
         print("\nTurn " + style_text(counter, style="bright") + " begins")
-        print("%s HP: %s" % (style_text(hero["hp"], style="bright"), hero["hp"]))
-        print("%s HP: %s\n" % (enemy["name"], enemy["hp"]))
+        print("%s HP: %s" % (style_text(hero["name"], style="bright"), hero["hp"]))
+        print("%s HP: %s\n" % (style_text(enemy["name"], style="bright"), enemy["hp"]))
         sleep(0.5)
         action = choose_action()
         if action == 1:
@@ -97,9 +96,9 @@ def cast_spell(attacker, defender, defender_hp, counter):
         damage = calculate_spell_damage(attacker=attacker, spell=spell)
         defender_hp = defender_hp - damage
         sleep(1)
-        print(style_text(attacker["name"], style="bright") + " dealt " +
-              color_text("%s magic damage" % damage, color="blue") + " to " +
-              style_text(defender["name"], style="bright"))
+        print("%s dealt %s to %s" % (style_text(attacker["name"], style="bright"),
+                                     color_text("%s magic damage" % damage, color="blue"),
+                                     defender["name"]))
         return defender_hp
 
 
@@ -124,9 +123,9 @@ def do_basic_attack(attacker, defender, defender_hp):
     damage = calculate_damage(attacker=attacker)
     defender_hp = defender_hp - damage
     sleep(1)
-    print(style_text(attacker["name"], style="bright") + " dealt " +
-          color_text("%s physical damage" % damage, color="red") + " to " +
-          style_text(defender["name"], style="bright"))
+    print("%s dealt %s to %s" % (style_text(attacker["name"], style="bright"),
+                                 color_text("%s physical damage" % damage, color="red"),
+                                 style_text(defender["name"], style="bright")))
     return defender_hp
 
 
