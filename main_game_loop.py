@@ -3,8 +3,9 @@ from characters import choose_enemy_to_encounter, get_character_from_character_l
     file_characters, regenerate_after_combat
 from combat import fight
 from shop import shop_encounter
-from common import sleep, reset_all_jsons, print_error_out_of_options_scope
+from common import reset_all_jsons, print_error_out_of_options_scope, style_text
 from inventory import use_item, change_equipped_weapon
+from time import sleep
 
 
 def main_loop():
@@ -26,7 +27,7 @@ def main_loop():
 def enemy_encounter(counter):
     stage = determine_game_stage(counter)
     enemy = choose_enemy_to_encounter(stage=stage)
-    print("You encounter %s on your path" % enemy["name"])
+    print("You encounter " + style_text(enemy["name"], style="bright") + " on your path")
     sleep(0.5)
     fight(hero=get_character_from_character_list(file=file_characters, character_id=0),
           enemy=enemy)

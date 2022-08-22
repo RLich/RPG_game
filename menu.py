@@ -1,5 +1,5 @@
 import common
-from common import sleep
+from time import sleep
 
 
 def main_menu():
@@ -19,6 +19,8 @@ def main_menu_options():
     answer = int(input(">"))
     if answer == 1:
         print("A new adventure begins")
+        sleep(0.5)
+
     elif answer == 2:
         print("Not implemented yet")
         sleep(1)

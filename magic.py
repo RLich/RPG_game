@@ -1,6 +1,6 @@
 import json
 from common import file_spells, get_object_from_json_list_by_id, \
-    print_error_out_of_options_scope, file_characters
+    print_error_out_of_options_scope
 import logging
 from characters import change_character_stat
 

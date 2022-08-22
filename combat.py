@@ -1,16 +1,17 @@
 from characters import change_character_stat
 from random import choice
-from common import print_error_out_of_options_scope, sleep, file_characters
+from common import print_error_out_of_options_scope, color_text, style_text
 import inventory
 import loot
 import logging
 import magic
-from colorama import Fore, Style
+from time import sleep
 
 
 def fight(hero, enemy):
     sleep(1)
-    print("%s(%shp) vs %s(%shp)" % (hero["name"], hero["hp"], enemy["name"], enemy["hp"]))
+    print(style_text(hero["name"], style="bright") + " vs " + style_text(enemy["name"],
+                                                                         style="bright"))
     sleep(1)
     hero_hp = hero["hp"]
     enemy_hp = enemy["hp"]
@@ -20,9 +21,9 @@ def fight(hero, enemy):
 def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
     while hero_hp >= 1 and enemy_hp >= 1:
         sleep(1)
-        print("\nTurn %s begins\n\n"
-              "Your HP: %s\n"
-              "%s HP: %s\n" % (counter, hero_hp, enemy["name"], enemy_hp))
+        print("\nTurn " + style_text(counter, style="bright") + " begins")
+        print("%s HP: %s" % (style_text(hero["hp"], style="bright"), hero["hp"]))
+        print("%s HP: %s\n" % (enemy["name"], enemy["hp"]))
         sleep(0.5)
         action = choose_action()
         if action == 1:
@@ -96,9 +97,9 @@ def cast_spell(attacker, defender, defender_hp, counter):
         damage = calculate_spell_damage(attacker=attacker, spell=spell)
         defender_hp = defender_hp - damage
         sleep(1)
-        print(Style.BRIGHT + "%s" % attacker["name"] + Style.RESET_ALL + " dealt " +
-              Fore.BLUE + "%s magic damage " % damage +
-              Style.RESET_ALL + "to " + Style.BRIGHT + "%s" % defender["name"] + Style.RESET_ALL)
+        print(style_text(attacker["name"], style="bright") + " dealt " +
+              color_text("%s magic damage" % damage, color="blue") + " to " +
+              style_text(defender["name"], style="bright"))
         return defender_hp
 
 
@@ -123,9 +124,9 @@ def do_basic_attack(attacker, defender, defender_hp):
     damage = calculate_damage(attacker=attacker)
     defender_hp = defender_hp - damage
     sleep(1)
-    print(Style.BRIGHT + "%s" % attacker["name"] + Style.RESET_ALL + " dealt " + Fore.RED +
-          "%s physical damage " % damage + Style.RESET_ALL + "to " + Style.BRIGHT + "%s" %
-          defender["name"] + Style.RESET_ALL)
+    print(style_text(attacker["name"], style="bright") + " dealt " +
+          color_text("%s physical damage" % damage, color="red") + " to " +
+          style_text(defender["name"], style="bright"))
     return defender_hp
 
 

@@ -1,7 +1,7 @@
 import random
 import items
 import inventory
-from common import sleep
+from time import sleep
 
 
 def generate_loot():

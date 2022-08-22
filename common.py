@@ -1,4 +1,3 @@
-from time import sleep
 import os
 from json import dumps
 import logging
@@ -20,8 +19,25 @@ def get_object_from_json_list_by_id(data, object_id):
         print("Object with ID: %s not found in %s" % (object_id, data))
 
 
-def wait(s):
-    sleep(s)
+def color_text(text, color):
+    # returns text in a color chosen from the dict
+    colors = {"red": Fore.RED, "green": Fore.GREEN, "blue": Fore.BLUE, "white": Fore.WHITE,
+              "yellow": Fore.YELLOW, "magenta": Fore.MAGENTA, "cyan": Fore.CYAN}
+    if color in colors.keys():
+        chosen_color = colors[color]
+    else:
+        chosen_color = Fore.BLACK
+    return chosen_color + str(text) + Style.RESET_ALL
+
+
+def style_text(text, style):
+    # returns text in style chosen from the dict
+    styles = {"dim": Style.DIM, "bright": Style.BRIGHT}
+    if style in styles.keys():
+        chosen_style = styles[style]
+    else:
+        chosen_style = Style.NORMAL
+    return chosen_style + str(text) + Style.RESET_ALL
 
 
 items_list = [

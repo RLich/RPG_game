@@ -3,6 +3,7 @@ import inventory
 import magic
 import logging
 from items import populate_weapons_shop_list, clear_weapons_shop_list_json, assign_free_id
+from time import sleep
 
 
 def shop_encounter():
@@ -12,9 +13,9 @@ def shop_encounter():
     elif answer_1 == 2:
         shop_sell()
     elif answer_1 == 3:
-        common.sleep(0.5)
+        sleep(0.5)
         print("\nLeaving the store\n")
-        common.sleep(0.5)
+        sleep(0.5)
         # leave
     else:
         common.print_error_out_of_options_scope()

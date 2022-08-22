@@ -1,8 +1,9 @@
 import json
 import logging
-from common import get_object_from_json_list_by_id, print_error_out_of_options_scope, sleep, \
+from common import get_object_from_json_list_by_id, print_error_out_of_options_scope, \
     file_items, file_weapons
 from characters import change_character_stat
+from time import sleep
 
 
 def add_weapon_to_inventory(weapon, is_from_shop):
