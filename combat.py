@@ -6,7 +6,7 @@ import loot
 import logging
 import magic
 from time import sleep
-
+#test
 
 def fight(hero, enemy):
     sleep(1)
