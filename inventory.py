@@ -12,7 +12,7 @@ def add_weapon_to_inventory(weapon, is_from_shop):
     else:
         weapon = vars(weapon)
     sleep(1)
-    print("Adding a new weapon to the inventory:\n%s (damage: %s)\n" % (weapon["name"],
+    print("Adding a new weapon to the inventory: %s (damage: %s)" % (weapon["name"],
                                                                         weapon["damage"]))
     file = open(file_weapons, "r")
     file_content = json.loads(file.read())
@@ -194,7 +194,7 @@ def use_item(character):
 def choose_item_to_use():
     print("Pick an item to use:")
     items_list = get_inventory(file=file_items)
-    # removing gold from the list
+    # removing gold from the list of items available to use
     items_list.pop(0)
     item_counter = 1
     available_items_id_list = []

@@ -2,6 +2,7 @@ import random
 import items
 import inventory
 from time import sleep
+import logging
 
 
 def generate_loot():
@@ -10,14 +11,14 @@ def generate_loot():
     loot_gold = random.randrange(1, 50)
     loot.append(loot_gold)
     if loot_gold == 1:
-        print("You have found:\n   %s gold coin" % loot_gold)
+        logging.debug("You have found:\n   %s gold coin" % loot_gold)
     else:
-        print("You have found:\n   %s gold coins" % loot_gold)
+        logging.debug("You have found:\n   %s gold coins" % loot_gold)
     if do_item_drop_as_loot(item="weapon") is True:
         sleep(0.5)
         weapon = items.create_weapon()
         loot.append(weapon)
-        print("   %s" % weapon.name)
+        logging.debug("   %s" % weapon.name)
         does_loot_contain_weapon = True
     else:
         does_loot_contain_weapon = False
@@ -25,18 +26,18 @@ def generate_loot():
         sleep(0.5)
         health_potions_quantity = random.choice([1, 2, 3])
         if health_potions_quantity == 1:
-            print("   %s %s" % (health_potions_quantity, "health potion"))
+            logging.debug("   %s %s" % (health_potions_quantity, "health potion"))
         elif health_potions_quantity > 1:
-            print("   %s %s" % (health_potions_quantity, "health potions"))
+            logging.debug("   %s %s" % (health_potions_quantity, "health potions"))
     else:
         health_potions_quantity = 0
     if do_item_drop_as_loot(item="mana_potion") is True:
         sleep(0.5)
         mana_potions_quantity = random.choice([1, 2, 3])
         if mana_potions_quantity == 1:
-            print("   %s %s" % (mana_potions_quantity, "mana potion"))
+            logging.debug("   %s %s" % (mana_potions_quantity, "mana potion"))
         elif mana_potions_quantity > 1:
-            print("   %s %s" % (mana_potions_quantity, "mana potions"))
+            logging.debug("   %s %s" % (mana_potions_quantity, "mana potions"))
     else:
         mana_potions_quantity = 0
     return loot, does_loot_contain_weapon, health_potions_quantity, mana_potions_quantity
@@ -75,7 +76,7 @@ def collect_loot(looted_gold_quantity, is_weapon, weapon, health_potions_quantit
 
 def loot_handling_after_combat(enemy):
     sleep(1)
-    print("%s dropped some loot" % enemy["name"])
+    print("%s dropped some loot:" % enemy["name"])
     loot = generate_loot()
     gold = loot[0][0]
     health_potions_quantity = loot[2]
