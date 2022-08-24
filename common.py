@@ -193,17 +193,21 @@ characters_list = [
     }
 ]
 
+current_enemy_list = "Place to do stuff to enemy in combat"
+
 file_characters = working_dir + "\\characters_list.json"
 file_spells = working_dir + "\\spells_list.json"
 file_weapons = working_dir + "\\weapons_list.json"
 file_items = working_dir + "\\items_list.json"
 file_shop_weapons = working_dir + "\\weapons_shop_list.json"
+file_current_enemy = working_dir + "\\current_enemy.json"
 
 
 def reset_all_jsons():
-    original_files_list = [spells_list, items_list, weapons_list, characters_list]
+    original_files_list = [
+        spells_list, items_list, weapons_list, characters_list, current_enemy_list]
     counter = 0
-    for file in [file_spells, file_items, file_weapons, file_characters]:
+    for file in [file_spells, file_items, file_weapons, file_characters, file_current_enemy]:
         logging.debug("Restoring original values in file: %s" % file)
         replace_file_content(file=file, content=original_files_list[counter])
         counter += 1

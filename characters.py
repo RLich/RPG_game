@@ -2,11 +2,14 @@ from common import working_dir
 import json
 import logging
 from random import randrange
-from common import get_object_from_json_list_by_id, file_characters
+from common import get_object_from_json_list_by_id, file_characters, file_current_enemy
 
 
 def change_character_stat(character, stat, how_much, action):
-    file = open(file_characters, "r")
+    if character["name"] == "Hero":
+        file = open(file_characters, "r")
+    else:
+        file = open(file_current_enemy, "r")
     file_content = json.loads(file.read())
     for creature in file_content:
         if creature["id"] == character["id"]:
@@ -16,16 +19,21 @@ def change_character_stat(character, stat, how_much, action):
                 creature[stat] = int(creature[stat] + how_much)
             else:
                 creature[stat] = int(creature[stat] - how_much)
-                if creature[stat] <= 0:
+                if creature[stat] <= 0 and stat != "hp":
                     logging.debug("Rising %s to 1, because it cannot be lower than 1" % stat)
                     creature[stat] = 1
     dict_list = file_content
     file_content = json.dumps(dict_list, indent=4)
     file.close()
 
-    with open(file_characters, "w") as outfile:
-        outfile.write(file_content)
-    file.close()
+    if character["name"] == "Hero":
+        with open(file_characters, "w") as outfile:
+            outfile.write(file_content)
+        file.close()
+    else:
+        with open(file_current_enemy, "w") as outfile:
+            outfile.write(file_content)
+        file.close()
 
 
 def get_character_from_character_list(file, character_id):
@@ -78,3 +86,18 @@ def regenerate_after_combat(character):
     if mp_to_regen > 0:
         print("Regenerating %s mp after combat" % mp_to_regen)
         change_character_stat(character=character, stat="mp", how_much=mp_to_regen, action="adding")
+
+
+def copy_enemy_to_current_enemy_json(enemy):
+    file = open(file_characters, "r")
+    file_content = json.loads(file.read())
+    for creature in file_content:
+        if creature["id"] == enemy["id"]:
+            logging.debug("Copying creature %s to the current_enemy.json file" % enemy["name"])
+            file_content = json.dumps([creature], indent=4)
+            file.close()
+            break
+
+    with open(file_current_enemy, "w") as outfile:
+        outfile.write(file_content)
+    file.close()

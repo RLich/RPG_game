@@ -1,0 +1,11 @@
+[
+    {
+        "id": 2,
+        "name": "Zombie",
+        "hp": 12,
+        "str": 10,
+        "int": 1,
+        "mp": 1,
+        "weapon_dmg": 0
+    }
+]

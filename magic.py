@@ -45,28 +45,30 @@ def print_spells_in_spellbook(spellbook):
 
 
 def choose_spell_to_cast(spellbook):
-    print("Choose a spell to cast")
-    spell_counter = 1
-    available_spells_id_list = []
-    used_counters = []
-    for spell in spellbook:
-        if spell["quantity"] == 1:
-            print(("%s) %s (%s damage, %s mana cost)" % (
-                spell_counter, spell["name"], spell["damage"], spell["mana_cost"])))
-            available_spells_id_list.append(spell["id"])
-            used_counters.append(spell_counter)
-            spell_counter += 1
-    chosen_spell = int(input())
-    if chosen_spell in used_counters:
-        # we subtract one from the user's input because of python's indexing. User's choice of "1"
-        # is python index of "0"
-        chosen_spell = available_spells_id_list[chosen_spell - 1]
-        chosen_spell = get_spell_from_spellbook(spell_id=chosen_spell)
-        return chosen_spell
-    else:
-        print_error_out_of_options_scope()
-        # WONT WORK, NEED A TURN REFACTOR
-        choose_spell_to_cast(spellbook)
+    while True:
+        print("Choose a spell to cast")
+        spell_counter = 1
+        available_spells_id_list = []
+        used_counters = []
+        for spell in spellbook:
+            if spell["quantity"] == 1:
+                print(("%s) %s (%s damage, %s mana cost)" % (
+                    spell_counter, spell["name"], spell["damage"], spell["mana_cost"])))
+                available_spells_id_list.append(spell["id"])
+                used_counters.append(spell_counter)
+                spell_counter += 1
+        print("%s) Back" % (spell_counter))
+        chosen_spell = int(input())
+        if chosen_spell in used_counters:
+            # we subtract one from the user's input because of python's indexing. User's choice of "1"
+            # is python index of "0"
+            chosen_spell = available_spells_id_list[chosen_spell - 1]
+            chosen_spell = get_spell_from_spellbook(spell_id=chosen_spell)
+            return chosen_spell
+        elif chosen_spell == spell_counter:
+            return False
+        else:
+            print_error_out_of_options_scope()
 
 
 # returns False if not enough mana to cast spell, otherwise returns mana remaining after

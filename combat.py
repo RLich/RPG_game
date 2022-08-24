@@ -1,77 +1,73 @@
-from characters import change_character_stat
+from characters import change_character_stat, get_character_from_character_list, \
+    copy_enemy_to_current_enemy_json
 from random import choice
-from common import print_error_out_of_options_scope, color_text, style_text
+from common import print_error_out_of_options_scope, color_text, style_text, file_characters, \
+    file_current_enemy
 import inventory
 import loot
 import logging
 import magic
 from time import sleep
 
+
 def fight(hero, enemy):
     sleep(1)
     print(style_text(hero["name"], style="bright") + " vs " + style_text(enemy["name"],
                                                                          style="bright"))
-    sleep(1)
-    hero_hp = hero["hp"]
-    enemy_hp = enemy["hp"]
-    turn(hero, enemy, hero_hp, enemy_hp)
+    copy_enemy_to_current_enemy_json(enemy=enemy)
+    turn(hero, enemy)
 
 
-def turn(hero, enemy, hero_hp, enemy_hp, counter=1):
-    while hero_hp >= 1 and enemy_hp >= 1:
+def turn(hero, enemy):
+    counter = 1
+    while hero["hp"] >= 1 and enemy["hp"] >= 1:
+        hero = get_character_from_character_list(file=file_characters, character_id=0)
+        enemy = get_character_from_character_list(file=file_current_enemy, character_id=enemy["id"])
         print("\nTurn " + style_text(counter, style="bright") + " begins")
         print("%s HP: %s" % (style_text(hero["name"], style="bright"), hero["hp"]))
-        print("%s HP: %s\n" % (style_text(enemy["name"], style="bright"), enemy["hp"]))
-        sleep(0.5)
-        action = choose_action()
+        print("%s HP: %s" % (style_text(enemy["name"], style="bright"), enemy["hp"]))
+        choose_action(hero, enemy)
+        if is_enemy_dead(enemy) is True:
+            loot.loot_handling_after_combat(enemy)
+            break
+        enemy_action = enemy_choose_action()
+        counter += 1
+        if enemy_action == 1:
+            do_basic_attack(attacker=enemy, defender=hero)
+        if is_hero_dead() is True:
+            quit()
+
+
+def choose_action(hero, enemy):
+    while True:
+        sleep(1)
+        print("\nChoose an action to perform:\n"
+              "1) Attack with your weapon\n"
+              "2) Cast a spell\n"
+              "3) Use an item\n"
+              "4) Try to retreat(50%) - not fully supported at moment")
+        action = int(input(">"))
         if action == 1:
-            enemy_hp = do_basic_attack(attacker=hero, defender=enemy, defender_hp=enemy_hp)
+            do_basic_attack(attacker=hero, defender=enemy)
+            break
         elif action == 2:
-            enemy_hp = cast_spell(
-                attacker=hero, defender=enemy, defender_hp=enemy_hp, counter=counter)
+            action = cast_spell(attacker=hero, defender=enemy)
+            if action is not False:
+                break
         elif action == 3:
-            was_item_used = inventory.use_item(character=hero)
-            if was_item_used is False:
-                action = "pass"
+            action = inventory.use_item(character=hero)
+            if action is not False:
+                break
         elif action == 4:
             retreat_roll = choice([1, 2])
             if retreat_roll == 1:
                 sleep(1)
                 print("Retreat successful")
+                # add a skip fight mechanic
                 quit()
             else:
                 sleep(1)
                 print("Retreat failed")
-        if is_enemy_dead(enemy_hp) is True:
-            loot.loot_handling_after_combat(enemy)
-            break
-        if action == "pass":
-            enemy_action = "pass"
-        else:
-            enemy_action = enemy_choose_action()
-            counter += 1
-        if enemy_action == 1:
-            hp_before_enemy_attack = hero_hp
-            hero_hp = do_basic_attack(attacker=enemy, defender=hero, defender_hp=hero_hp)
-            hp_to_be_removed = hp_before_enemy_attack - hero_hp
-            change_character_stat(
-                character=hero, stat="hp", how_much=hp_to_be_removed,
-                action="removing")
-        if is_hero_dead(hero_hp) is True:
-            quit()
-
-
-def choose_action():
-    while True:
-        sleep(0.5)
-        print("Choose an action to perform:\n"
-              "1) Attack with your weapon\n"
-              "2) Cast a spell\n"
-              "3) Use an item\n"
-              "4) Try to retreat(50%)")
-        answer = int(input(">"))
-        if answer in [1, 2, 3, 4]:
-            return answer
         else:
             print_error_out_of_options_scope()
 
@@ -82,23 +78,28 @@ def enemy_choose_action():
     return 1
 
 
-def cast_spell(attacker, defender, defender_hp, counter):
-    spell = magic.choose_spell_to_cast(spellbook=magic.get_spellbook())
-    spend_mana = magic.spend_mana_to_cast_spell(caster=attacker, spell=spell)
-    if spend_mana is False and attacker["name"] == "Hero":
-        defender_hp = choose_action()
-        return defender_hp
-    elif spend_mana is not False and attacker["name"] != "Hero":
-        enemy_choose_action()
-        # WONT WORK, NEED A TURN REFACTOR
-    else:
-        damage = calculate_spell_damage(attacker=attacker, spell=spell)
-        defender_hp = defender_hp - damage
-        sleep(1)
-        print("%s dealt %s to %s" % (style_text(attacker["name"], style="bright"),
-                                     color_text("%s magic damage" % damage, color="blue"),
-                                     defender["name"]))
-        return defender_hp
+def cast_spell(attacker, defender):
+    while True:
+        spell = magic.choose_spell_to_cast(spellbook=magic.get_spellbook())
+        # spell is False when player decided to go back from spell selection
+        if spell is False:
+            return False
+        was_enough_mana = magic.spend_mana_to_cast_spell(caster=attacker, spell=spell)
+        # no mana to cast -> no casting -> do another iteration
+        if was_enough_mana is False and attacker["name"] == "Hero":
+            pass
+        # no mana to cast + caster is not hero -> make AI decide what to do next
+        elif was_enough_mana is False and attacker["name"] != "Hero":
+            pass
+            # WONT WORK, NEED IMPLEMENTING ENEMY MAGIC USAGE
+        else:
+            damage = calculate_spell_damage(attacker=attacker, spell=spell)
+            sleep(0.5)
+            print("\n%s dealt %s to %s" % (style_text(attacker["name"], style="bright"),
+                                         color_text("%s magic damage" % damage, color="blue"),
+                                         defender["name"]))
+            change_character_stat(character=defender, stat="hp", how_much=damage, action="removing")
+            break
 
 
 def calculate_spell_damage(attacker, spell):
@@ -118,14 +119,13 @@ def calculate_spell_damage(attacker, spell):
     return damage
 
 
-def do_basic_attack(attacker, defender, defender_hp):
+def do_basic_attack(attacker, defender):
     damage = calculate_damage(attacker=attacker)
-    defender_hp = defender_hp - damage
     sleep(1)
-    print("%s dealt %s to %s" % (style_text(attacker["name"], style="bright"),
+    print("\n%s dealt %s to %s" % (style_text(attacker["name"], style="bright"),
                                  color_text("%s physical damage" % damage, color="red"),
                                  style_text(defender["name"], style="bright")))
-    return defender_hp
+    change_character_stat(character=defender, stat="hp", how_much=damage, action="removing")
 
 
 def calculate_damage(attacker):
@@ -133,7 +133,6 @@ def calculate_damage(attacker):
         equipped_weapon = inventory.get_equipped_weapon()
         weapon_damage = equipped_weapon["damage"]
         print("You are attacking with %s" % equipped_weapon["name"])
-        sleep(1)
     else:
         weapon_damage = attacker["weapon_dmg"]
     armor = 0
@@ -147,13 +146,15 @@ def calculate_damage(attacker):
     return damage
 
 
-def is_hero_dead(hero_hp):
-    if hero_hp <= 0:
+def is_hero_dead():
+    hero = get_character_from_character_list(file=file_characters, character_id=0)
+    if hero["hp"] <= 0:
         print("You are dead. Your journey has ended")
         return True
 
 
-def is_enemy_dead(enemy_hp):
-    if enemy_hp <= 0:
+def is_enemy_dead(enemy):
+    enemy = get_character_from_character_list(file=file_current_enemy, character_id=enemy["id"])
+    if enemy["hp"] <= 0:
         print("\nYour foe is vanquished!\n")
         return True
