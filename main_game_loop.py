@@ -2,7 +2,7 @@ import menu
 from characters import choose_enemy_to_encounter, get_character_from_character_list, \
     file_characters, regenerate_after_combat
 from combat import fight
-from shop import shop_encounter
+from shop import shop_welcome
 from common import reset_all_jsons, print_error_out_of_options_scope, style_text
 from inventory import use_item, change_equipped_weapon
 from time import sleep
@@ -19,7 +19,7 @@ def main_loop():
                                                                             character_id=0))
         after_combat_break()
         if game == 3 or game == 6 or game == 9 or game == 12:
-            shop_encounter()
+            shop_welcome()
         game += 1
     print("Congratulations, you have won the game. Feedback is welcomed :)")
 

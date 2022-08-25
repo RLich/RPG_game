@@ -1,8 +1,8 @@
 import json
 import logging
 from common import get_object_from_json_list_by_id, print_error_out_of_options_scope, \
-    file_items, file_weapons
-from characters import change_character_stat
+    file_items, file_weapons, file_characters
+from characters import change_character_stat, get_character_from_character_list
 from time import sleep
 
 
@@ -13,7 +13,7 @@ def add_weapon_to_inventory(weapon, is_from_shop):
         weapon = vars(weapon)
     sleep(1)
     print("Adding a new weapon to the inventory: %s (damage: %s)" % (weapon["name"],
-                                                                        weapon["damage"]))
+                                                                     weapon["damage"]))
     file = open(file_weapons, "r")
     file_content = json.loads(file.read())
     dict_list = file_content
@@ -229,14 +229,19 @@ def drink_potion(character, item):
         print("Restoring %s health" % item["restore"])
         change_character_stat(
             character=character, stat="hp", how_much=item["restore"], action="adding")
+        character = get_character_from_character_list(file=file_characters,
+                                                      character_id=0)
+        print("Current health: %s/%s" % (character["hp"], character["max_hp"]))
     else:
-        print("Drinking mana")
         if item["restore"] + character["mp"] > character["max_mp"]:
             print("mana would be greater than max mana, adjusting")
             item["restore"] = character["max_mp"] - character["mp"]
         print("Restoring %s mana" % item["restore"])
         change_character_stat(
             character=character, stat="mp", how_much=item["restore"], action="adding")
+        character = get_character_from_character_list(file=file_characters,
+                                                      character_id=0)
+        print("Current mana: %s/%s" % (character["mp"], character["max_mp"]))
     # need to edit item's "quantity" -> that will determine how much of it needs to be removed
     # I don't like it, note to self: refactor this remove_item_from_inventory function to
     # have "how_much" parameter handled in it, not outside

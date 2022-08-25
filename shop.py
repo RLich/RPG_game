@@ -7,14 +7,22 @@ from time import sleep
 
 
 def shop_encounter():
-    answer_1 = shop_welcome()
-    if answer_1 == 1:
+    shop_counter = 0
+    print(
+        "\nWelcome to my store, stranger. Would you like to buy or sell?\n1) Buy\n2) Sell\n3) "
+        "Leave")
+    answer = int(input(">"))
+    if answer == 1:
         shop_buy()
-    elif answer_1 == 2:
+    elif answer == 2:
         shop_sell()
-    elif answer_1 == 3:
+    elif answer == 3:
         sleep(0.5)
-        print("\nLeaving the store\n")
+        if shop_counter > 0:
+            print("\nAfter concluding your business, you return on the road\n")
+        else:
+            print("\nNot feeling in a mood for trading, you merely glance at the stacks of "
+                  "weapons and potions before returning to the world outside")
         sleep(0.5)
         # leave
     else:
@@ -23,13 +31,13 @@ def shop_encounter():
 
 
 def shop_welcome():
-    print(
-        "Welcome to my store, stranger. Would you like to buy or sell?\n1) Buy\n2) Sell\n3) Leave")
-    answer_1 = int(input(">"))
-    if answer_1 > 3:
-        common.print_error_out_of_options_scope()
-        shop_encounter()
-    return answer_1
+    print("\nYou enter a local store. Being covered in dried out blood and road dust, the store "
+          "owner glances at you with rather defensive look on his face. Then he sees your gold "
+          "pouch and summons a restrained smile to his face. Felling the weight of gold at the "
+          "waist, you come closer to the counter")
+    print("Available gold: %s" % inventory.get_item_from_inventory(file=common.file_items,
+                                                                   item_id=0)["quantity"])
+    shop_encounter()
 
 
 def shop_buy():
