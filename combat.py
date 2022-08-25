@@ -45,7 +45,7 @@ def choose_action(hero, enemy):
               "1) Attack with your weapon\n"
               "2) Cast a spell\n"
               "3) Use an item\n"
-              "4) Try to retreat(50%) - not fully supported at moment")
+              "4) Try to retreat(50%) - not fully supported at the moment")
         action = int(input(">"))
         if action == 1:
             do_basic_attack(attacker=hero, defender=enemy)
@@ -59,7 +59,7 @@ def choose_action(hero, enemy):
             if action is not False:
                 break
         elif action == 4:
-            retreat_roll = choice([1, 2])
+            retreat_roll = choice([2]) # changed for debugging purposes
             if retreat_roll == 1:
                 sleep(1)
                 print("Retreat successful")
@@ -68,6 +68,7 @@ def choose_action(hero, enemy):
             else:
                 sleep(1)
                 print("Retreat failed")
+                break
         else:
             print_error_out_of_options_scope()
 

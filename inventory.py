@@ -176,50 +176,53 @@ def swap_weapons_id(item_1, item_2, key="id"):
 
 
 def use_item(character):
-    item = choose_item_to_use()
-    if item is False:
-        return False
-    if item["id"] == 1 and character["hp"] == character["max_hp"]:
-        print("Your health is already full")
-        use_item(character=character)
-    elif item["id"] == 1:
-        drink_potion(character=character, item=item)
-    elif item["id"] == 2 and character["mp"] == character["max_mp"]:
-        print("Your mana is already full")
-        use_item(character=character)
-    else:
-        drink_potion(character=character, item=item)
+    while True:
+        item = choose_item_to_use()
+        if item is False:
+            return False
+        else:
+            if item["id"] == 1 and character["hp"] == character["max_hp"]:
+                print("Your health is already full")
+            elif item["id"] == 1:
+                drink_potion(character=character, item=item)
+                break
+            elif item["id"] == 2 and character["mp"] == character["max_mp"]:
+                print("Your mana is already full")
+                use_item(character=character)
+                break
+            else:
+                drink_potion(character=character, item=item)
+                break
 
 
 def choose_item_to_use():
-    print("Pick an item to use:")
-    items_list = get_inventory(file=file_items)
-    # removing gold from the list of items available to use
-    items_list.pop(0)
-    item_counter = 1
-    available_items_id_list = []
-    used_counters = []
+    while True:
+        print("Pick an item to use:")
+        items_list = get_inventory(file=file_items)
+        items_list.pop(0) # removing gold from the list of items available to use
+        item_counter = 1
+        available_items_id_list = []
+        used_counters = []
 
-    for item in items_list:
-        if item["id"] != 0 and item["quantity"] > 0:
-            print("%s) %s" % (item_counter, item["name"]))
-            available_items_id_list.append(item["id"])
-            used_counters.append(item_counter)
-            item_counter += 1
-    back_index = int(len(items_list) + 1)
-    print("%s) Back" % back_index)
-    answer = int(input(">"))
-    if answer in used_counters:
-        # we subtract one from the user's input because of python's indexing. User's choice of "1"
-        # is python's index of "0"
-        chosen_item_id = available_items_id_list[answer - 1]
-        chosen_item = get_item_from_inventory(file=file_items, item_id=chosen_item_id)
-        return chosen_item
-    elif answer == back_index:
-        return False
-    else:
-        print_error_out_of_options_scope()
-        choose_item_to_use()
+        for item in items_list:
+            if item["id"] != 0 and item["quantity"] > 0:
+                print("%s) %s" % (item_counter, item["name"]))
+                available_items_id_list.append(item["id"])
+                used_counters.append(item_counter)
+                item_counter += 1
+        back_index = int(len(items_list) + 1)
+        print("%s) Back" % back_index)
+        answer = int(input(">"))
+        if answer in used_counters:
+            # we subtract one from the user's input because of python's indexing. User's choice
+            # of "1" is python's index of "0"
+            chosen_item_id = available_items_id_list[answer - 1]
+            chosen_item = get_item_from_inventory(file=file_items, item_id=chosen_item_id)
+            return chosen_item
+        elif answer == back_index:
+            return False
+        else:
+            print_error_out_of_options_scope()
 
 
 def drink_potion(character, item):

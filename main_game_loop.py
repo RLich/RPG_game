@@ -45,7 +45,7 @@ def determine_game_stage(counter):
 
 def after_combat_break():
     while True:
-        print("\nYou are resting in a quiet place. What would you like to do now?"
+        print("\nYou are resting in a quiet place. What would you like to do?"
               "\n1) Continue with your journey"
               "\n2) Use an item"
               "\n3) Change equipped weapon"
@@ -54,10 +54,8 @@ def after_combat_break():
         if answer == 1:
             break
         elif answer == 2:
-            was_item_used = use_item(character=get_character_from_character_list(
-                file=file_characters, character_id=0))
-            if was_item_used is False:
-                after_combat_break()
+            use_item(character=get_character_from_character_list(file=file_characters,
+                                                                 character_id=0))
         elif answer == 3:
             change_equipped_weapon()
         elif answer == 4:
