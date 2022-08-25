@@ -5,10 +5,10 @@ from time import sleep
 import logging
 
 
-def generate_loot():
+def generate_loot(enemy):
     # loot list: gold, weapon, health_potions, mana_potions
     loot = []
-    loot_gold = random.randrange(1, 50)
+    loot_gold = generate_gold_loot(enemy=enemy)
     loot.append(loot_gold)
     if loot_gold == 1:
         logging.debug("You have found:\n   %s gold coin" % loot_gold)
@@ -41,6 +41,26 @@ def generate_loot():
     else:
         mana_potions_quantity = 0
     return loot, does_loot_contain_weapon, health_potions_quantity, mana_potions_quantity
+
+
+def generate_gold_loot(enemy):
+    weight = enemy["max_hp"] + enemy["str"]
+    logging.debug("Calculating based on enemy's max_hp (%s) + str (%s) = %s" % (
+        enemy["max_hp"], enemy["str"], weight))
+    gold = random.randrange(0, 10) + weight
+    event = random.randrange(0, 100)
+    if event in range(0, 80):
+        logging.debug("Leaving the loot gold as it is")
+    elif event in range(81, 90):
+        logging.debug("Doubling the gold - lucky find")
+        gold = gold * 2
+    else:
+        logging.debug("Making the gold be 1")
+        gold = 1
+    return gold
+
+
+
 
 
 def do_item_drop_as_loot(item):
@@ -77,7 +97,7 @@ def collect_loot(looted_gold_quantity, is_weapon, weapon, health_potions_quantit
 def loot_handling_after_combat(enemy):
     sleep(1)
     print("%s dropped some loot:" % enemy["name"])
-    loot = generate_loot()
+    loot = generate_loot(enemy=enemy)
     gold = loot[0][0]
     health_potions_quantity = loot[2]
     mana_potions_quantity = loot[3]

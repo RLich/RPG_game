@@ -1,11 +1,12 @@
 [
     {
-        "id": 2,
-        "name": "Zombie",
-        "hp": 12,
-        "str": 10,
-        "int": 1,
-        "mp": 1,
-        "weapon_dmg": 0
+        "id": 1,
+        "name": "Goblin",
+        "hp": -6,
+        "str": 5,
+        "int": 3,
+        "mp": 3,
+        "weapon_dmg": 3,
+        "max_hp": 5
     }
 ]

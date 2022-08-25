@@ -117,7 +117,8 @@ characters_list = [
         "str": 5,
         "int": 3,
         "mp": 3,
-        "weapon_dmg": 3
+        "weapon_dmg": 3,
+        "max_hp": 5
     },
     {
         "id": 2,
@@ -126,7 +127,8 @@ characters_list = [
         "str": 10,
         "int": 1,
         "mp": 1,
-        "weapon_dmg": 0
+        "weapon_dmg": 0,
+        "max_hp": 12
     },
     {
         "id": 3,
@@ -135,7 +137,8 @@ characters_list = [
         "str": 7,
         "int": 5,
         "mp": 5,
-        "weapon_dmg": 3
+        "weapon_dmg": 3,
+        "max_hp": 10
     },
     {
         "id": 4,
@@ -144,7 +147,8 @@ characters_list = [
         "str": 10,
         "int": 8,
         "mp": 8,
-        "weapon_dmg": 5
+        "weapon_dmg": 5,
+        "max_hp": 15
     },
     {
         "id": 5,
@@ -153,7 +157,8 @@ characters_list = [
         "str": 10,
         "int": 10,
         "mp": 10,
-        "weapon_dmg": 5
+        "weapon_dmg": 5,
+        "max_hp": 10
     },
     {
         "id": 6,
@@ -162,16 +167,18 @@ characters_list = [
         "str": 8,
         "int": 5,
         "mp": 5,
-        "weapon_dmg": 8
+        "weapon_dmg": 8,
+        "max_hp": 12
     },
     {
         "id": 7,
-        "name": "Goblin Berserker",
+        "name": "Hobgoblin",
         "hp": 10,
         "str": 7,
         "int": 5,
         "mp": 5,
-        "weapon_dmg": 10
+        "weapon_dmg": 10,
+        "max_hp": 10
     },
     {
         "id": 8,
@@ -180,7 +187,8 @@ characters_list = [
         "str": 12,
         "int": 5,
         "mp": 5,
-        "weapon_dmg": 7
+        "weapon_dmg": 7,
+        "max_hp": 22
     },
     {
         "id": 9,
@@ -189,7 +197,8 @@ characters_list = [
         "str": 20,
         "int": 5,
         "mp": 5,
-        "weapon_dmg": 0
+        "weapon_dmg": 0,
+        "max_hp": 30
     }
 ]
 
