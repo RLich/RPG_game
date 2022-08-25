@@ -149,7 +149,7 @@ def shop_spells():
     print_counter = 1
     for spell in spellbook:
         print("%s) %s (%s damage, price: %s gold)" % (print_counter, spell["name"],
-                                                      spell["damage"], spell["value"]))
+                                                      spell["power"], spell["value"]))
         print_counter += 1
     print("%s) Back" % print_counter)
     answer = int(input(">"))

@@ -1,8 +1,10 @@
 import json
 from common import file_spells, get_object_from_json_list_by_id, \
-    print_error_out_of_options_scope
+    print_error_out_of_options_scope, style_text, color_text, file_characters
 import logging
-from characters import change_character_stat
+from characters import change_character_stat, get_character_from_character_list
+from time import sleep
+from combat import calculate_spell_power
 
 
 class Spell:
@@ -35,13 +37,72 @@ def generate_spells_id_list(spellbook):
     return spells_id_list
 
 
-def print_spells_in_spellbook(spellbook):
+def print_spells_in_spellbook():
+    spellbook = get_spellbook()
     spell_counter = 1
     for spell in spellbook:
         if spell["quantity"] == 1:
-            print(("%s) %s (%s damage, %s mana cost)" % (
-                spell_counter, spell["name"], spell["damage"], spell["mana_cost"])))
+            print(("%s) %s (%s power, %s mana cost)" % (
+                spell_counter, spell["name"], spell["power"], spell["mana_cost"])))
             spell_counter += 1
+
+
+def cast_spell(attacker, defender):
+    while True:
+        spell = choose_spell_to_cast(spellbook=get_spellbook())
+        # spell is False when player decided to go back from spell selection
+        if spell is False:
+            return False
+        was_enough_mana = check_if_enough_mana(caster=attacker, spell=spell)
+        # no mana to cast -> no casting -> do another iteration
+        if was_enough_mana is False and attacker["name"] == "Hero":
+            pass
+        # no mana to cast + caster is not hero -> make AI decide what to do next
+        elif was_enough_mana is False and attacker["name"] != "Hero":
+            pass  # NEED IMPLEMENTING ENEMY MAGIC USAGE
+        elif spell["healing"] is False:
+            damage = calculate_spell_power(attacker=attacker, spell=spell)
+            sleep(0.5)
+            print("\n%s dealt %s to %s" % (style_text(attacker["name"], style="bright"),
+                                           color_text("%s magic damage" % damage, color="blue"),
+                                           style_text(defender["name"], style="bright")))
+            change_character_stat(character=defender, stat="hp", how_much=damage, action="removing")
+            spend_mana_to_cast_spell(
+                caster=attacker, spell=spell, caster_mana_after_casting=was_enough_mana)
+            break
+        else:
+            healing = calculate_spell_power(attacker=attacker, spell=spell)
+            sleep(0.5)
+            if attacker["hp"] == attacker["max_hp"]:
+                print("Your health is already full")
+                return False
+            elif healing + attacker["hp"] > attacker["max_hp"]:
+                logging.debug("Health would be greater than max health, adjusting")
+                healing = attacker["max_hp"] - attacker["hp"]
+                print("\n%s restored %s to %s" % (style_text(attacker["name"], style="bright"),
+                                                  color_text("%s health" % healing,
+                                                             color="blue"),
+                                                  style_text(attacker["name"], style="bright")))
+                change_character_stat(character=attacker, stat="hp", how_much=healing,
+                                      action="adding")
+                spend_mana_to_cast_spell(
+                    caster=attacker, spell=spell, caster_mana_after_casting=was_enough_mana)
+                character = get_character_from_character_list(file=file_characters,
+                                                              character_id=0)
+                print("Current health: %s/%s" % (character["hp"], character["max_hp"]))
+            else:
+                print("\n%s restored %s to %s" % (style_text(attacker["name"], style="bright"),
+                                                  color_text("%s health" % healing,
+                                                             color="blue"),
+                                                  style_text(attacker["name"], style="bright")))
+                change_character_stat(character=attacker, stat="hp", how_much=healing,
+                                      action="adding")
+                spend_mana_to_cast_spell(
+                    caster=attacker, spell=spell, caster_mana_after_casting=was_enough_mana)
+                character = get_character_from_character_list(file=file_characters,
+                                                              character_id=0)
+                print("Current health: %s/%s" % (character["hp"], character["max_hp"]))
+                break
 
 
 def choose_spell_to_cast(spellbook):
@@ -51,13 +112,13 @@ def choose_spell_to_cast(spellbook):
         available_spells_id_list = []
         used_counters = []
         for spell in spellbook:
-            if spell["quantity"] == 1:
-                print(("%s) %s (%s damage, %s mana cost)" % (
-                    spell_counter, spell["name"], spell["damage"], spell["mana_cost"])))
+            if spell["quantity"] == 1 and spell["combat"] is True:
+                print(("%s) %s (%s power, %s mana cost)" % (
+                    spell_counter, spell["name"], spell["power"], spell["mana_cost"])))
                 available_spells_id_list.append(spell["id"])
                 used_counters.append(spell_counter)
                 spell_counter += 1
-        print("%s) Back" % (spell_counter))
+        print("%s) Back" % spell_counter)
         chosen_spell = int(input())
         if chosen_spell in used_counters:
             # we subtract one from the user's input because of python's indexing. User's choice of "1"
@@ -73,7 +134,7 @@ def choose_spell_to_cast(spellbook):
 
 # returns False if not enough mana to cast spell, otherwise returns mana remaining after
 # spellcasting
-def spend_mana_to_cast_spell(caster, spell):
+def check_if_enough_mana(caster, spell):
     caster_mana = caster["mp"]
     spell_cost = spell["mana_cost"]
     if caster_mana >= spell_cost:
@@ -82,9 +143,14 @@ def spend_mana_to_cast_spell(caster, spell):
         print("Not enough mana to cast %s" % spell["name"])
         return False
     caster_mana_after_casting = caster_mana - spell_cost
-    change_character_stat(character=caster, stat="mp", how_much=spell_cost, action="removing")
-    print("Mana remaining: %s" % caster_mana_after_casting)
     return caster_mana_after_casting
+
+
+def spend_mana_to_cast_spell(caster, spell, caster_mana_after_casting):
+    sleep(0.5)
+    change_character_stat(character=caster, stat="mp", how_much=spell["mana_cost"],
+                          action="removing")
+    print("Mana remaining: %s" % caster_mana_after_casting)
 
 
 def remove_spell_from_spellbook(spell):

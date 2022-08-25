@@ -1,5 +1,6 @@
 import common
 from time import sleep
+import magic
 
 
 def main_menu():

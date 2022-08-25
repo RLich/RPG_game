@@ -51,7 +51,7 @@ def choose_action(hero, enemy):
             do_basic_attack(attacker=hero, defender=enemy)
             break
         elif action == 2:
-            action = cast_spell(attacker=hero, defender=enemy)
+            action = magic.cast_spell(attacker=hero, defender=enemy)
             if action is not False:
                 break
         elif action == 3:
@@ -59,7 +59,7 @@ def choose_action(hero, enemy):
             if action is not False:
                 break
         elif action == 4:
-            retreat_roll = choice([2]) # changed for debugging purposes
+            retreat_roll = choice([2])  # changed for debugging purposes
             if retreat_roll == 1:
                 sleep(1)
                 print("Retreat successful")
@@ -79,36 +79,12 @@ def enemy_choose_action():
     return 1
 
 
-def cast_spell(attacker, defender):
-    while True:
-        spell = magic.choose_spell_to_cast(spellbook=magic.get_spellbook())
-        # spell is False when player decided to go back from spell selection
-        if spell is False:
-            return False
-        was_enough_mana = magic.spend_mana_to_cast_spell(caster=attacker, spell=spell)
-        # no mana to cast -> no casting -> do another iteration
-        if was_enough_mana is False and attacker["name"] == "Hero":
-            pass
-        # no mana to cast + caster is not hero -> make AI decide what to do next
-        elif was_enough_mana is False and attacker["name"] != "Hero":
-            pass
-            # WONT WORK, NEED IMPLEMENTING ENEMY MAGIC USAGE
-        else:
-            damage = calculate_spell_damage(attacker=attacker, spell=spell)
-            sleep(0.5)
-            print("\n%s dealt %s to %s" % (style_text(attacker["name"], style="bright"),
-                                         color_text("%s magic damage" % damage, color="blue"),
-                                         defender["name"]))
-            change_character_stat(character=defender, stat="hp", how_much=damage, action="removing")
-            break
-
-
-def calculate_spell_damage(attacker, spell):
+def calculate_spell_power(attacker, spell):
     roll = choice([1, 2, 3, 4, 5, 6])
-    if isinstance(spell["damage"], int) is True:
-        damage = attacker["int"] + spell["damage"] + roll
+    if isinstance(spell["power"], int) is True:
+        damage = attacker["int"] + spell["power"] + roll
     else:
-        damage_string_split = spell["damage"].split("d")
+        damage_string_split = spell["power"].split("d")
         damage_range_list = []
         counter = 1
         while counter <= int(damage_string_split[1]):
@@ -124,8 +100,8 @@ def do_basic_attack(attacker, defender):
     damage = calculate_damage(attacker=attacker)
     sleep(1)
     print("\n%s dealt %s to %s" % (style_text(attacker["name"], style="bright"),
-                                 color_text("%s physical damage" % damage, color="red"),
-                                 style_text(defender["name"], style="bright")))
+                                   color_text("%s physical damage" % damage, color="red"),
+                                   style_text(defender["name"], style="bright")))
     change_character_stat(character=defender, stat="hp", how_much=damage, action="removing")
 
 

@@ -188,8 +188,6 @@ def use_item(character):
                 break
             elif item["id"] == 2 and character["mp"] == character["max_mp"]:
                 print("Your mana is already full")
-                use_item(character=character)
-                break
             else:
                 drink_potion(character=character, item=item)
                 break
@@ -228,6 +226,7 @@ def choose_item_to_use():
 def drink_potion(character, item):
     if item["id"] == 1:
         if item["restore"] + character["hp"] > character["max_hp"]:
+            logging.debug("health would be greater than max health, adjusting")
             item["restore"] = character["max_hp"] - character["hp"]
         print("Restoring %s health" % item["restore"])
         change_character_stat(
@@ -237,7 +236,7 @@ def drink_potion(character, item):
         print("Current health: %s/%s" % (character["hp"], character["max_hp"]))
     else:
         if item["restore"] + character["mp"] > character["max_mp"]:
-            print("mana would be greater than max mana, adjusting")
+            logging.debug("mana would be greater than max mana, adjusting")
             item["restore"] = character["max_mp"] - character["mp"]
         print("Restoring %s mana" % item["restore"])
         change_character_stat(

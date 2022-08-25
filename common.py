@@ -7,8 +7,7 @@ working_dir = os.getcwd()
 
 
 def print_error_out_of_options_scope():
-    print(Fore.RED + "\nPlease choose a number within given options\n")
-    print(Style.RESET_ALL)
+    print(color_text("\nPlease choose a number within given options\n", color="red"))
 
 
 def get_object_from_json_list_by_id(data, object_id):
@@ -67,26 +66,46 @@ spells_list = [
     {
         "id": 1,
         "name": "Firebolt",
-        "damage": 6,
+        "power": 6,
         "mana_cost": 2,
         "value": 10,
-        "quantity": 1
+        "quantity": 1,
+        "combat": True,
+        "camp": False,
+        "healing": False
     },
     {
         "id": 2,
         "name": "Fireball",
-        "damage": 12,
+        "power": 12,
         "mana_cost": 4,
         "value": 20,
-        "quantity": 0
+        "quantity": 0,
+        "combat": True,
+        "camp": False,
+        "healing": False
     },
     {
         "id": 3,
         "name": "Elemental Missiles",
-        "damage": "6d6",
+        "power": "6d6",
         "mana_cost": 5,
         "value": 30,
-        "quantity": 0
+        "quantity": 0,
+        "combat": True,
+        "camp": False,
+        "healing": False
+    },
+{
+        "id": 4,
+        "name": "Healing Light",
+        "power": 5,
+        "mana_cost": 2,
+        "value": 20,
+        "quantity": 1,
+        "combat": True,
+        "camp": True,
+        "healing": True
     }
 ]
 
