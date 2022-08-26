@@ -35,8 +35,8 @@ def shop_welcome():
           "the shopkeeper glances at you with rather defensive look on his face. He then sees your "
           "gold pouch and summons a restrained smile to his face. Felling the weight of gold at the"
           " waist, you come closer to the counter")
-    print("Available gold: %s" % inventory.get_item_from_inventory(file=common.file_items,
-                                                                   item_id=0)["quantity"])
+    print(common.style_text("Available gold: %s" % inventory.get_item_from_inventory(
+        file=common.file_items, item_id=0)["quantity"], style="bright"))
     shop_encounter()
 
 
@@ -148,9 +148,10 @@ def shop_spells():
     print("Here are my wares:")
     print_counter = 1
     for spell in spellbook:
-        print("%s) %s (%s damage, price: %s gold)" % (print_counter, spell["name"],
-                                                      spell["power"], spell["value"]))
-        print_counter += 1
+        if spell["quantity"] == 0:
+            print("%s) %s (%s power, price: %s gold)" % (print_counter, spell["name"],
+                                                         spell["power"], spell["value"]))
+            print_counter += 1
     print("%s) Back" % print_counter)
     answer = int(input(">"))
     if answer < print_counter:
@@ -177,7 +178,7 @@ def shop_weapons():
     print("%s) Back" % (len(weapons_for_sale) + 1))
     answer = int(input())
     if answer in range(1, 6):
-        chosen_weapon = weapons_for_sale[answer - 1] # deducting one because indexing starts from 0
+        chosen_weapon = weapons_for_sale[answer - 1]  # deducting one because indexing starts from 0
         free_id = assign_free_id()
         chosen_weapon["id"] = free_id
         logging.debug("Assigning a new ID to the chosen weapon. New ID: %s" % free_id)
