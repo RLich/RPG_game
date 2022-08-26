@@ -51,7 +51,7 @@ def choose_action(hero, enemy):
             do_basic_attack(attacker=hero, defender=enemy)
             break
         elif action == 2:
-            action = magic.cast_spell(attacker=hero, defender=enemy)
+            action = magic.cast_spell(attacker=hero, defender=enemy, camp=False)
             if action is not False:
                 break
         elif action == 3:

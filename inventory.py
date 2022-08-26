@@ -11,7 +11,7 @@ def add_weapon_to_inventory(weapon, is_from_shop):
         pass
     else:
         weapon = vars(weapon)
-    sleep(1)
+    sleep(0.5)
     print("Adding a new weapon to the inventory: %s (damage: %s)" % (weapon["name"],
                                                                      weapon["damage"]))
     file = open(file_weapons, "r")

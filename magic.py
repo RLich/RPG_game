@@ -47,9 +47,9 @@ def print_spells_in_spellbook():
             spell_counter += 1
 
 
-def cast_spell(attacker, defender):
+def cast_spell(attacker, defender, camp):
     while True:
-        spell = choose_spell_to_cast(spellbook=get_spellbook())
+        spell = choose_spell_to_cast(spellbook=get_spellbook(), camp=camp)
         # spell is False when player decided to go back from spell selection
         if spell is False:
             return False
@@ -102,27 +102,36 @@ def cast_spell(attacker, defender):
                 character = get_character_from_character_list(file=file_characters,
                                                               character_id=0)
                 print("Current health: %s/%s" % (character["hp"], character["max_hp"]))
-                break
+            break
 
 
-def choose_spell_to_cast(spellbook):
+def choose_spell_to_cast(spellbook, camp):
     while True:
         print("Choose a spell to cast")
         spell_counter = 1
         available_spells_id_list = []
         used_counters = []
-        for spell in spellbook:
-            if spell["quantity"] == 1 and spell["combat"] is True:
-                print(("%s) %s (%s power, %s mana cost)" % (
-                    spell_counter, spell["name"], spell["power"], spell["mana_cost"])))
-                available_spells_id_list.append(spell["id"])
-                used_counters.append(spell_counter)
-                spell_counter += 1
+        if camp is False:
+            for spell in spellbook:
+                if spell["quantity"] == 1 and spell["combat"] is True:
+                    print(("%s) %s (%s power, %s mana cost)" % (
+                        spell_counter, spell["name"], spell["power"], spell["mana_cost"])))
+                    available_spells_id_list.append(spell["id"])
+                    used_counters.append(spell_counter)
+                    spell_counter += 1
+        else:
+            for spell in spellbook:
+                if spell["quantity"] == 1 and spell["camp"] is True:
+                    print(("%s) %s (%s power, %s mana cost)" % (
+                        spell_counter, spell["name"], spell["power"], spell["mana_cost"])))
+                    available_spells_id_list.append(spell["id"])
+                    used_counters.append(spell_counter)
+                    spell_counter += 1
         print("%s) Back" % spell_counter)
-        chosen_spell = int(input())
+        chosen_spell = int(input(">"))
         if chosen_spell in used_counters:
-            # we subtract one from the user's input because of python's indexing. User's choice of "1"
-            # is python index of "0"
+            # we subtract one from the user's input because of python's indexing. User's choice
+            # of "1" is python index of "0"
             chosen_spell = available_spells_id_list[chosen_spell - 1]
             chosen_spell = get_spell_from_spellbook(spell_id=chosen_spell)
             return chosen_spell
@@ -130,6 +139,7 @@ def choose_spell_to_cast(spellbook):
             return False
         else:
             print_error_out_of_options_scope()
+
 
 
 # returns False if not enough mana to cast spell, otherwise returns mana remaining after

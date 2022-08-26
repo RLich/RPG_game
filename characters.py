@@ -81,10 +81,10 @@ def regenerate_after_combat(character):
         mp_to_regen = 0
 
     if hp_to_regen > 0:
-        print("\nRegenerating %s hp after combat" % hp_to_regen)
+        print("\nRegenerating %s health after combat" % hp_to_regen)
         change_character_stat(character=character, stat="hp", how_much=hp_to_regen, action="adding")
     if mp_to_regen > 0:
-        print("Regenerating %s mp after combat" % mp_to_regen)
+        print("Regenerating %s mana after combat" % mp_to_regen)
         change_character_stat(character=character, stat="mp", how_much=mp_to_regen, action="adding")
 
 

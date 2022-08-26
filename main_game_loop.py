@@ -6,6 +6,7 @@ from shop import shop_welcome
 from common import reset_all_jsons, print_error_out_of_options_scope, style_text
 from inventory import use_item, change_equipped_weapon
 from time import sleep
+from magic import cast_spell
 
 
 def main_loop():
@@ -45,25 +46,23 @@ def determine_game_stage(counter):
 
 def after_combat_break():
     while True:
+        hero = get_character_from_character_list(file=file_characters, character_id=0)
         print("\nYou are resting in a quiet place. What would you like to do?"
               "\n1) Continue with your journey"
               "\n2) Use an item"
               "\n3) Change equipped weapon"
-              "\n4) Cast a spell (not implemented yet)")
+              "\n4) Cast a spell")
         answer = int(input(">"))
         if answer == 1:
             break
         elif answer == 2:
-            use_item(character=get_character_from_character_list(file=file_characters,
-                                                                 character_id=0))
+            use_item(character=hero)
         elif answer == 3:
             change_equipped_weapon()
         elif answer == 4:
-            print("I've told you it's not implemented yet :) You will fight a monster instead")
-            break
+            cast_spell(attacker=hero, defender=hero, camp=True)
         else:
             print_error_out_of_options_scope()
-            after_combat_break()
 
 
 main_loop()

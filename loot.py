@@ -24,7 +24,7 @@ def generate_loot(enemy):
         does_loot_contain_weapon = False
     if do_item_drop_as_loot(item="health_potion") is True:
         sleep(0.5)
-        health_potions_quantity = random.choice([1, 2, 3])
+        health_potions_quantity = random.choice([1, 2])
         if health_potions_quantity == 1:
             logging.debug("   %s %s" % (health_potions_quantity, "health potion"))
         elif health_potions_quantity > 1:
@@ -33,7 +33,7 @@ def generate_loot(enemy):
         health_potions_quantity = 0
     if do_item_drop_as_loot(item="mana_potion") is True:
         sleep(0.5)
-        mana_potions_quantity = random.choice([1, 2, 3])
+        mana_potions_quantity = random.choice([1, 2])
         if mana_potions_quantity == 1:
             logging.debug("   %s %s" % (mana_potions_quantity, "mana potion"))
         elif mana_potions_quantity > 1:

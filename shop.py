@@ -31,10 +31,10 @@ def shop_encounter():
 
 
 def shop_welcome():
-    print("\nYou enter a local store. Being covered in dried out blood and road dust, the store "
-          "owner glances at you with rather defensive look on his face. Then he sees your gold "
-          "pouch and summons a restrained smile to his face. Felling the weight of gold at the "
-          "waist, you come closer to the counter")
+    print("\nYou enter a local store. Being covered in dried out blood and road dust, "
+          "the shopkeeper glances at you with rather defensive look on his face. He then sees your "
+          "gold pouch and summons a restrained smile to his face. Felling the weight of gold at the"
+          " waist, you come closer to the counter")
     print("Available gold: %s" % inventory.get_item_from_inventory(file=common.file_items,
                                                                    item_id=0)["quantity"])
     shop_encounter()
