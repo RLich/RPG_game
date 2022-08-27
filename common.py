@@ -1,7 +1,8 @@
 import os
 from json import dumps
 import logging
-from colorama import Fore, Style
+from colorama import Fore, Style, init
+init() # without init, colorama doesnt seem to work in windows cmd
 
 working_dir = os.getcwd()
 
