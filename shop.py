@@ -73,7 +73,7 @@ def shop_sell():
 
 
 def what_to_sell(type_of_item):
-    print("What kind of %s do you have?" % type_of_item)
+    print("What kind of %ss do you have?" % type_of_item)
     if type_of_item == "supply":
         items_list = inventory.get_inventory(file=common.file_items)
         # removing gold from the list
@@ -87,8 +87,8 @@ def what_to_sell(type_of_item):
         if type_of_item == "supply" and item["quantity"] > 0:
             print("%s) %s (%s gold)" % (item_counter, item["name"], item["value"]))
         elif type_of_item == "weapon":
-            print("%s) %s (%s damage, price: %s gold" % (item_counter, item["name"],
-                                                         item["damage"], item["value"]))
+            print("%s) %s (%s damage, price: %s gold)" % (item_counter, item["name"],
+                                                          item["damage"], item["value"]))
         else:
             print("%s) %s (%s gold)" % (item_counter, item["name"], item["value"]))
         available_items_id_list.append(item["id"])
@@ -98,13 +98,10 @@ def what_to_sell(type_of_item):
     print("%s) Back" % back_index)
     answer = int(input(">"))
     if answer in used_counters:
-        # we subtract one from the user's input because of python's indexing. User's choice of "1"
-        # is python's index of "0"
+        # we subtract one from the user's input because of python's indexing. User's choice
+        # of "1" is python's index of "0"
         chosen_item_id = available_items_id_list[answer - 1]
         equipped_weapon = inventory.get_equipped_weapon()
-        if type_of_item == "weapon" and chosen_item_id == equipped_weapon["id"]:
-            print("You cannot sell an equipped weapon")
-            what_to_sell(type_of_item=type_of_item)
         if type_of_item == "supply":
             chosen_item = inventory.get_item_from_inventory(file=common.file_items,
                                                             item_id=chosen_item_id)
@@ -114,12 +111,17 @@ def what_to_sell(type_of_item):
         if type_of_item == "weapon":
             quantity = 1
         else:
-            quantity = how_many_items(item=chosen_item, action="selling", type_of_item=type_of_item)
-        sell_something(
-            item=chosen_item,
-            how_many=quantity,
-            type_of_item=type_of_item
-        )
+            quantity = how_many_items(
+                item=chosen_item, action="selling", type_of_item=type_of_item)
+        if type_of_item == "weapon" and chosen_item_id == equipped_weapon["id"]:
+            print("You cannot sell an equipped weapon")
+            what_to_sell(type_of_item=type_of_item)
+        else:
+            sell_something(
+                item=chosen_item,
+                how_many=quantity,
+                type_of_item=type_of_item
+            )
     elif answer == back_index:
         shop_sell()
     else:
