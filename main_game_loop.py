@@ -1,6 +1,6 @@
 import menu
 from characters import choose_enemy_to_encounter, get_character_from_character_list, \
-    file_characters, regenerate_after_combat
+    file_characters, regenerate_after_combat, check_if_level_up_ready, change_character_stat
 from combat import fight
 from shop import shop_welcome
 from common import reset_all_jsons, print_error_out_of_options_scope, style_text
@@ -15,9 +15,9 @@ def main_loop():
     game_length = 15
     game = 1
     while game <= game_length:
-        enemy_encounter(counter=game)
-        regenerate_after_combat(character=get_character_from_character_list(file=file_characters,
-                                                                            character_id=0))
+        enemy_encounter(counter=game, hero=get_character_from_character_list(
+            file=file_characters, character_id=0))
+        check_if_level_up_ready()
         after_combat_break()
         if game == 3 or game == 6 or game == 9 or game == 12:
             shop_welcome()
@@ -25,13 +25,15 @@ def main_loop():
     print("Congratulations, you have won the game. Feedback is welcomed :)")
 
 
-def enemy_encounter(counter):
+def enemy_encounter(counter, hero):
     stage = determine_game_stage(counter)
     enemy = choose_enemy_to_encounter(stage=stage)
     print("You encounter " + style_text(enemy["name"], style="bright") + " on your path")
     sleep(0.5)
-    fight(hero=get_character_from_character_list(file=file_characters, character_id=0),
-          enemy=enemy)
+    fight(hero=hero, enemy=enemy)
+    regenerate_after_combat(character=get_character_from_character_list(
+        file=file_characters, character_id=0))
+    change_character_stat(character=hero, stat="xp", how_much=enemy["xp"], action="adding")
 
 
 def determine_game_stage(counter):

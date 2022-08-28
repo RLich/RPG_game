@@ -38,7 +38,7 @@
         "power": 5,
         "mana_cost": 2,
         "value": 20,
-        "quantity": 1,
+        "quantity": 0,
         "combat": true,
         "camp": true,
         "healing": true

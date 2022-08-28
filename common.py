@@ -103,7 +103,7 @@ spells_list = [
         "power": 5,
         "mana_cost": 2,
         "value": 20,
-        "quantity": 1,
+        "quantity": 0,
         "combat": True,
         "camp": True,
         "healing": True
@@ -128,6 +128,8 @@ characters_list = [
         "str": 5,
         "int": 5,
         "mp": 10,
+        "xp": 0,
+        "level": 1,
         "max_mp": 10
     },
     {
@@ -138,6 +140,7 @@ characters_list = [
         "int": 3,
         "mp": 3,
         "weapon_dmg": 3,
+        "xp": 5,
         "max_hp": 5
     },
     {
@@ -148,6 +151,7 @@ characters_list = [
         "int": 1,
         "mp": 1,
         "weapon_dmg": 0,
+        "xp": 5,
         "max_hp": 12
     },
     {
@@ -158,6 +162,7 @@ characters_list = [
         "int": 5,
         "mp": 5,
         "weapon_dmg": 3,
+        "xp": 5,
         "max_hp": 10
     },
     {
@@ -168,6 +173,7 @@ characters_list = [
         "int": 8,
         "mp": 8,
         "weapon_dmg": 5,
+        "xp": 10,
         "max_hp": 15
     },
     {
@@ -178,6 +184,7 @@ characters_list = [
         "int": 10,
         "mp": 10,
         "weapon_dmg": 5,
+        "xp": 10,
         "max_hp": 10
     },
     {
@@ -188,6 +195,7 @@ characters_list = [
         "int": 5,
         "mp": 5,
         "weapon_dmg": 8,
+        "xp": 10,
         "max_hp": 12
     },
     {
@@ -198,6 +206,7 @@ characters_list = [
         "int": 5,
         "mp": 5,
         "weapon_dmg": 10,
+        "xp": 15,
         "max_hp": 10
     },
     {
@@ -208,6 +217,7 @@ characters_list = [
         "int": 5,
         "mp": 5,
         "weapon_dmg": 7,
+        "xp": 15,
         "max_hp": 22
     },
     {
@@ -218,6 +228,7 @@ characters_list = [
         "int": 5,
         "mp": 5,
         "weapon_dmg": 0,
+        "xp": 15,
         "max_hp": 30
     }
 ]

@@ -1,8 +1,9 @@
-from common import working_dir
 import json
 import logging
 from random import randrange
-from common import get_object_from_json_list_by_id, file_characters, file_current_enemy
+from time import sleep
+from common import get_object_from_json_list_by_id, file_characters, file_current_enemy, \
+    print_error_out_of_options_scope, style_text
 
 
 def change_character_stat(character, stat, how_much, action):
@@ -101,3 +102,53 @@ def copy_enemy_to_current_enemy_json(enemy):
     with open(file_current_enemy, "w") as outfile:
         outfile.write(file_content)
     file.close()
+
+
+def check_if_level_up_ready():
+    character = get_character_from_character_list(file=file_characters, character_id=0)
+    xp_to_lvl_up = 10 * character["level"]
+    if character["xp"] >= xp_to_lvl_up:
+        print(style_text(text="\nYou feel more experienced. A level has been gained",
+                         style="bright"))
+        sleep(0.5)
+        if character["xp"] > xp_to_lvl_up:
+            xp_to_adjust = character["xp"] - xp_to_lvl_up
+            logging.debug("Adjusting hero's xp to reflect the fact that more xp was gained than "
+                          "was needed to level up")
+            change_character_stat(
+                character=character, stat="xp", action="removing", how_much=xp_to_adjust)
+        change_character_stat(
+            character=character, stat="level", action="adding", how_much=1)
+        level_up(character=character)
+
+
+def level_up(character):
+    while True:
+        stats_to_lvl_up = ["max_hp", "max_mp", "str", "int"]
+        sleep(0.5)
+        print("All this killing is finally paying off. What would you like to improve about "
+              "yourself?")
+        print("1) 10 Health(currently: %s)"
+              "\n2) 10 Mana (currently: %s)"
+              "\n3) 5 Strength (currently: %s)"
+              "\n4) 5 Intelligence (currently: %s)"
+              % (character[stats_to_lvl_up[0]], character[stats_to_lvl_up[1]],
+                 character[stats_to_lvl_up[2]], character[stats_to_lvl_up[3]]))
+        answer = int(input(">"))
+        if answer in range(1, 3):
+            change_character_stat(character=character, stat=(stats_to_lvl_up[answer-1]),
+                                  how_much=10, action="adding")
+            # adding 10 hp/mana so the leveled up stat's are not "empty"
+            if answer == 1:
+                change_character_stat(character=character, stat="hp",
+                                      how_much=10, action="adding")
+            else:
+                change_character_stat(character=character, stat="mp",
+                                      how_much=10, action="adding")
+            break
+        elif answer in range(3, 5):
+            change_character_stat(character=character, stat=(stats_to_lvl_up[answer-1]),
+                                  how_much=5, action="adding")
+            break
+        else:
+            print_error_out_of_options_scope()
