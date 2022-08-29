@@ -9,7 +9,7 @@ from time import sleep
 def shop_encounter():
     shop_counter = 0
     print(
-        "\nWelcome to my store, stranger. Would you like to buy or sell?\n1) Buy\n2) Sell\n3) "
+        "\n- Welcome to my store, stranger. Would you like to buy or sell?\n1) Buy\n2) Sell\n3) "
         "Leave")
     answer = int(input(">"))
     if answer == 1:
@@ -41,7 +41,7 @@ def shop_welcome():
 
 
 def shop_buy():
-    print("What can I interest you with?")
+    print("- What can I interest you with?")
     print("1) Supplies\n2) Weapons\n3) Spells\n4) Back")
     answer = int(input(">"))
     if answer == 1:
@@ -58,7 +58,7 @@ def shop_buy():
 
 
 def shop_sell():
-    print("What would you like to sell?"
+    print("- What would you like to sell?"
           "\n1) Supplies\n2) Weapons\n3) Back")
     answer = int(input(">"))
     if answer == 1:
@@ -73,7 +73,7 @@ def shop_sell():
 
 
 def what_to_sell(type_of_item):
-    print("What kind of %ss do you have?" % type_of_item)
+    print("- What kind of %ss do you have?" % type_of_item)
     if type_of_item == "supply":
         items_list = inventory.get_inventory(file=common.file_items)
         # removing gold from the list
@@ -130,7 +130,7 @@ def what_to_sell(type_of_item):
 
 
 def shop_supplies():
-    print("Here are my wares:"
+    print("- Here are my wares:"
           "\n1) Health potion (10g)"
           "\n2) Mana potion (10g)"
           "\n3) Back")
@@ -147,33 +147,44 @@ def shop_supplies():
 
 def shop_spells():
     spellbook = magic.get_spellbook()
-    print("Here are my wares:")
-    print_counter = 1
+    print("- Here are my wares:")
+    spell_counter = 1
+    available_spells_id_list = []
+    used_counters = []
     for spell in spellbook:
         if spell["quantity"] == 0:
-            print("%s) %s (%s power, price: %s gold)" % (print_counter, spell["name"],
+            print("%s) %s (%s power, price: %s gold)" % (spell_counter, spell["name"],
                                                          spell["power"], spell["value"]))
-            print_counter += 1
-    print("%s) Back" % print_counter)
-    answer = int(input(">"))
-    if answer < print_counter:
-        spell = magic.get_spell_from_spellbook(spell_id=answer)
-        if spell["quantity"] == 1:
-            print("You already have this spell")
-            shop_spells()
-        else:
-            buy_something(item=spell, type_of_item="spell")
-    elif answer == print_counter:
+            available_spells_id_list.append(spell["id"])
+            used_counters.append(spell_counter)
+            spell_counter += 1
+    if spell_counter == 1:
+        print("\nShopkeeper is looking around nervously, but eventually sighs:\n- I don't have "
+              "any new spells for you, traveller\n")
+        sleep(1)
         shop_buy()
     else:
-        common.print_error_out_of_options_scope()
-        shop_spells()
+        print("%s) Back" % spell_counter)
+        answer = int(input(">"))
+        if answer < spell_counter:
+            spell_id = available_spells_id_list[answer - 1]
+            spell = magic.get_spell_from_spellbook(spell_id=spell_id)
+            if spell["quantity"] == 1:
+                print("You already have this spell")
+                shop_spells()
+            else:
+                buy_something(item=spell, type_of_item="spell")
+        elif answer == spell_counter:
+            shop_buy()
+        else:
+            common.print_error_out_of_options_scope()
+            shop_spells()
 
 
 def shop_weapons():
     populate_weapons_shop_list()
     weapons_for_sale = inventory.get_inventory(file=common.file_shop_weapons)
-    print("This is what I've got:")
+    print("- This is what I've got:")
     for weapon in weapons_for_sale:
         print("%s) %s (damage: %s, price: %s)" % (weapon["id"], weapon["name"], weapon["damage"],
                                                   weapon["value"]))
@@ -194,10 +205,10 @@ def shop_weapons():
 
 
 def how_many_items(item, action, type_of_item):
-    print("How many of those?")
+    print("- How many of those?")
     answer = int(input(">"))
     if answer <= 0:
-        print("Very funny. Anything else?")
+        print("- Very funny. Anything else?")
         shop_encounter()
     else:
         if action == "buying":
