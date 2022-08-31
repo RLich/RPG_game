@@ -39,6 +39,7 @@ def enemy_encounter(counter, hero):
         change_character_stat(character=hero, stat="xp", how_much=enemy["xp"], action="adding")
         break
 
+
 def determine_game_stage(counter):
     if counter in [1, 2, 3]:
         stage = "early"
@@ -56,7 +57,8 @@ def after_combat_break():
               "\n1) Continue with your journey"
               "\n2) Use an item"
               "\n3) Change equipped weapon"
-              "\n4) Cast a spell")
+              "\n4) Cast a spell"
+              "\n5) Examine your character")
         answer = int(input(">"))
         if answer == 1:
             break
@@ -66,6 +68,16 @@ def after_combat_break():
             change_equipped_weapon()
         elif answer == 4:
             cast_spell(attacker=hero, defender=hero, camp=True)
+        elif answer == 5:
+            print("\nYou take a closer look at yourself:"
+                  "\nHealth: %s/%s"
+                  "\nMana: %s/%s"
+                  "\nStrength: %s"
+                  "\nIntelligence: %s"
+                  "\nLevel: %s"
+                  "\nExperience: %s/%s\n"
+                  % (hero["hp"], hero["max_hp"], hero["mp"], hero["max_mp"], hero["str"],
+                     hero["int"], hero["level"], hero["xp"], hero["level"]*10))
         else:
             print_error_out_of_options_scope()
 
