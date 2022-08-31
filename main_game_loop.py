@@ -15,8 +15,9 @@ def main_loop():
     game_length = 15
     game = 1
     while game <= game_length:
-        enemy_encounter(counter=game, hero=get_character_from_character_list(
-            file=file_characters, character_id=0))
+        if enemy_encounter(counter=game, hero=get_character_from_character_list(
+                file=file_characters, character_id=0)) is False:  # it's false if player escaped
+            game -= 1
         check_if_level_up_ready()
         after_combat_break()
         if game == 3 or game == 6 or game == 9 or game == 12:
@@ -26,15 +27,17 @@ def main_loop():
 
 
 def enemy_encounter(counter, hero):
-    stage = determine_game_stage(counter)
-    enemy = choose_enemy_to_encounter(stage=stage)
-    print("You encounter " + style_text(enemy["name"], style="bright") + " on your path")
-    sleep(0.5)
-    fight(hero=hero, enemy=enemy)
-    regenerate_after_combat(character=get_character_from_character_list(
-        file=file_characters, character_id=0))
-    change_character_stat(character=hero, stat="xp", how_much=enemy["xp"], action="adding")
-
+    while True:
+        stage = determine_game_stage(counter)
+        enemy = choose_enemy_to_encounter(stage=stage)
+        print("You encounter " + style_text(enemy["name"], style="bright") + " on your path")
+        sleep(0.5)
+        if fight(hero=hero, enemy=enemy) is False:
+            return False
+        regenerate_after_combat(character=get_character_from_character_list(
+            file=file_characters, character_id=0))
+        change_character_stat(character=hero, stat="xp", how_much=enemy["xp"], action="adding")
+        break
 
 def determine_game_stage(counter):
     if counter in [1, 2, 3]:

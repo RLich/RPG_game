@@ -1,1 +1,13 @@
-"Place to do stuff to enemy in combat"
+[
+    {
+        "id": 3,
+        "name": "Bandit",
+        "hp": 10,
+        "str": 7,
+        "int": 5,
+        "mp": 5,
+        "weapon_dmg": 3,
+        "xp": 5,
+        "max_hp": 10
+    }
+]

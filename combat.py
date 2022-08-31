@@ -15,7 +15,8 @@ def fight(hero, enemy):
     print(style_text(hero["name"], style="bright") + " vs " + style_text(enemy["name"],
                                                                          style="bright"))
     copy_enemy_to_current_enemy_json(enemy=enemy)
-    turn(hero, enemy)
+    if turn(hero, enemy) is False:
+        return False  # returning False if player escaped combat
 
 
 def turn(hero, enemy):
@@ -26,7 +27,8 @@ def turn(hero, enemy):
         print("\nTurn " + style_text(counter, style="bright") + " begins")
         print("%s HP: %s" % (style_text(hero["name"], style="bright"), hero["hp"]))
         print("%s HP: %s" % (style_text(enemy["name"], style="bright"), enemy["hp"]))
-        choose_action(hero, enemy)
+        if choose_action(hero, enemy) is False:
+            return False  # returning False if player escaped combat
         if is_enemy_dead(enemy) is True:
             loot.loot_handling_after_combat(enemy)
             break
@@ -35,6 +37,9 @@ def turn(hero, enemy):
         if enemy_action == 1:
             do_basic_attack(attacker=enemy, defender=hero)
         if is_hero_dead() is True:
+            sleep(1)
+            print("Press any button to quit")
+            input(">")
             quit()
 
 
@@ -45,7 +50,7 @@ def choose_action(hero, enemy):
               "1) Attack with your weapon\n"
               "2) Cast a spell\n"
               "3) Use an item\n"
-              "4) Try to retreat(50%) - not fully supported at the moment")
+              "4) Try to retreat(50%)")
         action = int(input(">"))
         if action == 1:
             do_basic_attack(attacker=hero, defender=enemy)
@@ -59,12 +64,11 @@ def choose_action(hero, enemy):
             if action is not False:
                 break
         elif action == 4:
-            retreat_roll = choice([2])  # changed for debugging purposes
+            retreat_roll = choice([1, 2])
             if retreat_roll == 1:
                 sleep(1)
                 print("Retreat successful")
-                # add a skip fight mechanic
-                quit()
+                return False  # returning False if player escaped combat
             else:
                 sleep(1)
                 print("Retreat failed")
