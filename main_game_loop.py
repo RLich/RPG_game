@@ -3,10 +3,11 @@ from characters import choose_enemy_to_encounter, get_character_from_character_l
     file_characters, regenerate_after_combat, check_if_level_up_ready, change_character_stat
 from combat import fight
 from shop import shop_welcome
-from common import reset_all_jsons, print_error_out_of_options_scope, style_text
-from inventory import use_item, change_equipped_weapon
+from common import reset_all_jsons, print_error_out_of_options_scope, style_text, file_items, \
+    file_weapons
+from inventory import use_item, change_equipped_weapon, get_inventory
 from time import sleep
-from magic import cast_spell
+from magic import cast_spell, get_spellbook
 
 
 def main_loop():
@@ -58,7 +59,9 @@ def after_combat_break():
               "\n2) Use an item"
               "\n3) Change equipped weapon"
               "\n4) Cast a spell"
-              "\n5) Examine your character")
+              "\n5) Examine your character"
+              "\n6) Browse your inventory"
+              "\n7) Browse your spellbook")
         answer = int(input(">"))
         if answer == 1:
             break
@@ -77,7 +80,25 @@ def after_combat_break():
                   "\nLevel: %s"
                   "\nExperience: %s/%s\n"
                   % (hero["hp"], hero["max_hp"], hero["mp"], hero["max_mp"], hero["str"],
-                     hero["int"], hero["level"], hero["xp"], hero["level"]*10))
+                     hero["int"], hero["level"], hero["xp"], hero["level"] * 10))
+        elif answer == 6:
+            weapons = get_inventory(file=file_weapons)
+            items = get_inventory(file=file_items)
+            print("\nHealth potions: %s"
+                  "\nMana potions: %s" % (items[1]["quantity"], items[2]["quantity"]))
+            for weapon in weapons:
+                print("%s: %s damage (worth: %sg)" % (weapon["name"], weapon["damage"],
+                                                      weapon["value"]))
+        elif answer == 7:
+            spellbook = get_spellbook()
+            print("You open up your spellbook:")
+            for spell in spellbook:
+                if spell["quantity"] == 1 and spell["healing"] is True:
+                    print("%s: %s healing power (mana cost: %s)" % (spell["name"], spell["power"],
+                                                                    spell["mana_cost"]))
+                elif spell["quantity"] == 1 and spell["healing"] is False:
+                    print("%s: %s damaging power (mana cost: %s)" % (spell["name"], spell["power"],
+                                                                     spell["mana_cost"]))
         else:
             print_error_out_of_options_scope()
 

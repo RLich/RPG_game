@@ -141,7 +141,6 @@ def choose_spell_to_cast(spellbook, camp):
             print_error_out_of_options_scope()
 
 
-
 # returns False if not enough mana to cast spell, otherwise returns mana remaining after
 # spellcasting
 def check_if_enough_mana(caster, spell):
