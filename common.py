@@ -92,7 +92,7 @@ spells_list = [
         "power": "6d6",
         "mana_cost": 5,
         "value": 30,
-        "quantity": 0,
+        "quantity": 1,
         "combat": True,
         "camp": False,
         "healing": False

@@ -1,6 +1,6 @@
 from characters import change_character_stat, get_character_from_character_list, \
     copy_enemy_to_current_enemy_json
-from random import choice
+from random import choice, randrange
 from common import print_error_out_of_options_scope, color_text, style_text, file_characters, \
     file_current_enemy
 import inventory
@@ -84,19 +84,19 @@ def enemy_choose_action():
 
 
 def calculate_spell_power(attacker, spell):
-    roll = choice([1, 2, 3, 4, 5, 6])
+    standard_roll = choice([1, 2, 3, 4, 5, 6])
     if isinstance(spell["power"], int) is True:
-        damage = attacker["int"] + spell["power"] + roll
+        damage = attacker["int"] + spell["power"] + standard_roll
     else:
         damage_string_split = spell["power"].split("d")
-        damage_range_list = []
-        counter = 1
-        while counter <= int(damage_string_split[1]):
-            damage_range_list.append(counter)
-            counter += 1
-        additional_roll = choice(damage_range_list)
-        spell_damage_roll = int(damage_string_split[0]) * int(additional_roll + roll)
-        damage = attacker["int"] + spell_damage_roll
+        power = int(damage_string_split[1]) + 1
+        damage_from_dices_list = []
+        number_of_dices = int(damage_string_split[0]) + 1
+        for dice in range(1, number_of_dices):
+            roll = randrange(1, power)
+            damage_from_dices_list.append(roll)
+        sum_of_damage_from_dices = sum(damage_from_dices_list)
+        damage = attacker["int"] + standard_roll + sum_of_damage_from_dices
     return damage
 
 
