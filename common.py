@@ -8,7 +8,11 @@ working_dir = os.getcwd()
 
 
 def print_error_out_of_options_scope():
-    print(color_text("\nPlease choose a number within given options\n", color="red"))
+    print(color_text("Please choose a number within given options\n", color="red"))
+
+
+def print_error_wrong_value():
+    print(color_text("Please use a number\n", color="red"))
 
 
 def get_object_from_json_list_by_id(data, object_id):

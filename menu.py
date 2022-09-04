@@ -17,17 +17,21 @@ def welcome_message():
 
 
 def main_menu_options():
-    answer = int(input(">"))
-    if answer == 1:
-        print("A new adventure begins")
-        sleep(0.5)
+    while True:
+        try:
+            answer = int(input(">"))
+            if answer == 1:
+                print("A new adventure begins")
+                sleep(0.5)
+                break
 
-    elif answer == 2:
-        print("Not implemented yet")
-        sleep(1)
-        main_menu()
-    elif answer == 3:
-        quit()
-    else:
-        common.print_error_out_of_options_scope()
-        main_menu_options()
+            elif answer == 2:
+                print("Not implemented yet")
+                sleep(1)
+            elif answer == 3:
+                quit()
+            else:
+                common.print_error_out_of_options_scope()
+                main_menu_options()
+        except ValueError:
+            common.print_error_wrong_value()

@@ -2,7 +2,7 @@ from characters import change_character_stat, get_character_from_character_list,
     copy_enemy_to_current_enemy_json
 from random import choice, randrange
 from common import print_error_out_of_options_scope, color_text, style_text, file_characters, \
-    file_current_enemy
+    file_current_enemy, print_error_wrong_value
 import inventory
 import loot
 import logging
@@ -45,36 +45,39 @@ def turn(hero, enemy):
 
 def choose_action(hero, enemy):
     while True:
-        sleep(1)
-        print("\nChoose an action to perform:\n"
-              "1) Attack with your weapon\n"
-              "2) Cast a spell\n"
-              "3) Use an item\n"
-              "4) Try to retreat(50%)")
-        action = int(input(">"))
-        if action == 1:
-            do_basic_attack(attacker=hero, defender=enemy)
-            break
-        elif action == 2:
-            action = magic.cast_spell(attacker=hero, defender=enemy, camp=False)
-            if action is not False:
+        try:
+            sleep(1)
+            print("\nChoose an action to perform:\n"
+                  "1) Attack with your weapon\n"
+                  "2) Cast a spell\n"
+                  "3) Use an item\n"
+                  "4) Try to retreat(50%)")
+            action = int(input(">"))
+            if action == 1:
+                do_basic_attack(attacker=hero, defender=enemy)
                 break
-        elif action == 3:
-            action = inventory.use_item(character=hero)
-            if action is not False:
-                break
-        elif action == 4:
-            retreat_roll = choice([1, 2])
-            if retreat_roll == 1:
-                sleep(1)
-                print("Retreat successful")
-                return False  # returning False if player escaped combat
+            elif action == 2:
+                action = magic.cast_spell(attacker=hero, defender=enemy, camp=False)
+                if action is not False:
+                    break
+            elif action == 3:
+                action = inventory.use_item(character=hero)
+                if action is not False:
+                    break
+            elif action == 4:
+                retreat_roll = choice([1, 2])
+                if retreat_roll == 1:
+                    sleep(1)
+                    print("Retreat successful")
+                    return False  # returning False if player escaped combat
+                else:
+                    sleep(1)
+                    print("Retreat failed")
+                    break
             else:
-                sleep(1)
-                print("Retreat failed")
-                break
-        else:
-            print_error_out_of_options_scope()
+                print_error_out_of_options_scope()
+        except ValueError:
+            print_error_wrong_value()
 
 
 def enemy_choose_action():

@@ -1,6 +1,7 @@
 import json
 from common import file_spells, get_object_from_json_list_by_id, \
-    print_error_out_of_options_scope, style_text, color_text, file_characters
+    print_error_out_of_options_scope, style_text, color_text, file_characters, \
+    print_error_wrong_value
 import logging
 from characters import change_character_stat, get_character_from_character_list
 from time import sleep
@@ -107,38 +108,41 @@ def cast_spell(attacker, defender, camp):
 
 def choose_spell_to_cast(spellbook, camp):
     while True:
-        print("Choose a spell to cast")
-        spell_counter = 1
-        available_spells_id_list = []
-        used_counters = []
-        if camp is False:
-            for spell in spellbook:
-                if spell["quantity"] == 1 and spell["combat"] is True:
-                    print(("%s) %s (%s power, %s mana cost)" % (
-                        spell_counter, spell["name"], spell["power"], spell["mana_cost"])))
-                    available_spells_id_list.append(spell["id"])
-                    used_counters.append(spell_counter)
-                    spell_counter += 1
-        else:
-            for spell in spellbook:
-                if spell["quantity"] == 1 and spell["camp"] is True:
-                    print(("%s) %s (%s power, %s mana cost)" % (
-                        spell_counter, spell["name"], spell["power"], spell["mana_cost"])))
-                    available_spells_id_list.append(spell["id"])
-                    used_counters.append(spell_counter)
-                    spell_counter += 1
-        print("%s) Back" % spell_counter)
-        chosen_spell = int(input(">"))
-        if chosen_spell in used_counters:
-            # we subtract one from the user's input because of python's indexing. User's choice
-            # of "1" is python index of "0"
-            chosen_spell = available_spells_id_list[chosen_spell - 1]
-            chosen_spell = get_spell_from_spellbook(spell_id=chosen_spell)
-            return chosen_spell
-        elif chosen_spell == spell_counter:
-            return False
-        else:
-            print_error_out_of_options_scope()
+        try:
+            print("Choose a spell to cast")
+            spell_counter = 1
+            available_spells_id_list = []
+            used_counters = []
+            if camp is False:
+                for spell in spellbook:
+                    if spell["quantity"] == 1 and spell["combat"] is True:
+                        print(("%s) %s (%s power, %s mana cost)" % (
+                            spell_counter, spell["name"], spell["power"], spell["mana_cost"])))
+                        available_spells_id_list.append(spell["id"])
+                        used_counters.append(spell_counter)
+                        spell_counter += 1
+            else:
+                for spell in spellbook:
+                    if spell["quantity"] == 1 and spell["camp"] is True:
+                        print(("%s) %s (%s power, %s mana cost)" % (
+                            spell_counter, spell["name"], spell["power"], spell["mana_cost"])))
+                        available_spells_id_list.append(spell["id"])
+                        used_counters.append(spell_counter)
+                        spell_counter += 1
+            print("%s) Back" % spell_counter)
+            chosen_spell = int(input(">"))
+            if chosen_spell in used_counters:
+                # we subtract one from the user's input because of python's indexing. User's choice
+                # of "1" is python index of "0"
+                chosen_spell = available_spells_id_list[chosen_spell - 1]
+                chosen_spell = get_spell_from_spellbook(spell_id=chosen_spell)
+                return chosen_spell
+            elif chosen_spell == spell_counter:
+                return False
+            else:
+                print_error_out_of_options_scope()
+        except ValueError:
+            print_error_wrong_value()
 
 
 # returns False if not enough mana to cast spell, otherwise returns mana remaining after
