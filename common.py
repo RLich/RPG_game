@@ -2,6 +2,7 @@ import os
 from json import dumps
 import logging
 from colorama import Fore, Style, init
+from time import sleep
 init() # without init, colorama doesnt seem to work in windows cmd
 
 working_dir = os.getcwd()
@@ -9,10 +10,12 @@ working_dir = os.getcwd()
 
 def print_error_out_of_options_scope():
     print(color_text("Please choose a number within given options\n", color="red"))
+    sleep(0.5)
 
 
 def print_error_wrong_value():
     print(color_text("Please use a number\n", color="red"))
+    sleep(0.5)
 
 
 def get_object_from_json_list_by_id(data, object_id):

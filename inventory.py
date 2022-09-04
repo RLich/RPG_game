@@ -130,6 +130,7 @@ def change_equipped_weapon():
               (style_text(equipped_weapon["name"], style="bright"), equipped_weapon["damage"]))
         print("Available weapons to equip:")
         weapons_list = get_inventory(file=file_weapons)
+        del weapons_list[0]
         weapon_counter = 1
         available_weapons_id_list = []
         used_counters = []
@@ -143,9 +144,7 @@ def change_equipped_weapon():
         print("What weapon would you like to equip?")
         try:
             answer = int(input(">"))
-            if answer == 1:
-                print(color_text("That is your current weapon\n", color="red"))
-            elif answer in used_counters:
+            if answer in used_counters:
                 # we subtract one from the user's input because of python's indexing. User's
                 # choice of "1" is python's index of "0"
                 chosen_weapon_id = available_weapons_id_list[answer - 1]
