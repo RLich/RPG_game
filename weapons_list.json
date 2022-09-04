@@ -4,5 +4,11 @@
         "name": "Trusty knife",
         "damage": 3,
         "value": 5
+    },
+    {
+        "id": 1,
+        "name": "Mastercraft Knife",
+        "damage": 11,
+        "value": 18
     }
 ]

@@ -27,7 +27,7 @@
         "power": "6d6",
         "mana_cost": 5,
         "value": 30,
-        "quantity": 1,
+        "quantity": 0,
         "combat": true,
         "camp": false,
         "healing": false

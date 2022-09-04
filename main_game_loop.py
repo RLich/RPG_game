@@ -84,8 +84,10 @@ def after_combat_break():
         elif answer == 6:
             weapons = get_inventory(file=file_weapons)
             items = get_inventory(file=file_items)
-            print("\nHealth potions: %s"
-                  "\nMana potions: %s" % (items[1]["quantity"], items[2]["quantity"]))
+            print("\nGold: %s"
+                  "\nHealth potions: %s"
+                  "\nMana potions: %s" % (items[0]["quantity"],items[1]["quantity"],
+                                          items[2]["quantity"]))
             for weapon in weapons:
                 print("%s: %s damage (worth: %sg)" % (weapon["name"], weapon["damage"],
                                                       weapon["value"]))
