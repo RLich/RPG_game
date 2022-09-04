@@ -60,9 +60,6 @@ def generate_gold_loot(enemy):
     return gold
 
 
-
-
-
 def do_item_drop_as_loot(item):
     # determine if an item ("weapon" / "health_potion" / "mana_potion") dropped as a loot
     item_drop_roll = random.randrange(1, 10)
