@@ -8,13 +8,14 @@ from common import reset_all_jsons, print_error_out_of_options_scope, style_text
 from inventory import use_item, change_equipped_weapon, get_inventory
 from time import sleep
 from magic import cast_spell, get_spellbook
+from items import populate_weapons_shop_list, clear_weapons_shop_list_json
 
 
 def main_loop():
     reset_all_jsons()
     menu.main_menu()
     game_length = 15
-    game = 1
+    game = 3
     while game <= game_length:
         if enemy_encounter(counter=game, hero=get_character_from_character_list(
                 file=file_characters, character_id=0)) is False:  # it's false if player escaped
@@ -23,7 +24,9 @@ def main_loop():
         sleep(1)
         after_combat_break()
         if game == 3 or game == 6 or game == 9 or game == 12:
+            populate_weapons_shop_list()
             shop_welcome()
+            clear_weapons_shop_list_json()
         game += 1
     print("Congratulations, you have won the game. Feedback is welcomed :)")
 

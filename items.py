@@ -141,3 +141,31 @@ def clear_weapons_shop_list_json():
     file = file_shop_weapons
     weapons_shop_list = open(file, "w")
     weapons_shop_list.close()
+
+
+def remove_weapon_from_shop_list(weapon):
+    logging.debug("Removing %s from the weapons shop list" % weapon["name"])
+    file = open(file_shop_weapons, "r")
+    file_content = json.loads(file.read())
+    dict_list = file_content
+    file_content.remove(weapon)
+
+    file_content = json.dumps(dict_list, indent=4)
+    file.close()
+
+    with open(file_shop_weapons, "w") as outfile:
+        outfile.write(file_content)
+
+
+def add_weapon_to_shop_list(weapon):
+    logging.debug("Adding %s to the weapons shop list" % weapon["name"])
+    file = open(file_shop_weapons, "r")
+    file_content = json.loads(file.read())
+    dict_list = file_content
+    file_content.append(weapon)
+
+    file_content = json.dumps(dict_list, indent=4)
+    file.close()
+
+    with open(file_shop_weapons, "w") as outfile:
+        outfile.write(file_content)

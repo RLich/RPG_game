@@ -14,8 +14,8 @@ def change_character_stat(character, stat, how_much, action):
     file_content = json.loads(file.read())
     for creature in file_content:
         if creature["id"] == character["id"]:
-            logging.debug("Replacing old %s stat %s with new item's stat %s" % (
-                character["name"], creature[stat], character[stat]))
+            logging.debug("Replacing old %s stat %s - %s with new stat - %s" % (
+                character["name"], stat, creature[stat], character[stat]))
             if action == "adding":
                 creature[stat] = int(creature[stat] + how_much)
             else:

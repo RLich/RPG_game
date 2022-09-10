@@ -1,7 +1,7 @@
 import json
 import logging
 from common import get_object_from_json_list_by_id, print_error_out_of_options_scope, \
-    file_items, file_weapons, file_characters, print_error_wrong_value, color_text, style_text
+    file_items, file_weapons, file_characters, print_error_wrong_value, style_text
 from characters import change_character_stat, get_character_from_character_list
 from time import sleep
 
@@ -92,8 +92,8 @@ def replace_item_key_value_in_inventory(item, key, action):
     file_content = json.loads(file.read())
     for object in file_content:
         if object["id"] == item["id"]:
-            logging.debug("Replacing old item's %s %s with new item's quantity %s" % (
-                object[key], key, item[key]))
+            logging.debug("Replacing old item's %s %s %s with new item's quantity %s" % (
+                object["name"], object[key], key, item[key]))
             if action == "adding":
                 object[key] = object[key] + item[key]
             elif action == "replacing":

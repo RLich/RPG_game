@@ -2,7 +2,7 @@ import common
 import inventory
 import magic
 import logging
-from items import populate_weapons_shop_list, clear_weapons_shop_list_json, assign_free_id
+from items import remove_weapon_from_shop_list, assign_free_id, add_weapon_to_shop_list
 from time import sleep
 
 
@@ -226,25 +226,32 @@ def shop_spells():
 def shop_weapons():
     while True:
         try:
-            populate_weapons_shop_list()
             weapons_for_sale = inventory.get_inventory(file=common.file_shop_weapons)
             print("- This is what I've got:")
+            counter = 1
             for weapon in weapons_for_sale:
-                print("%s) %s (damage: %s, price: %s)" % (weapon["id"], weapon["name"],
-                                                          weapon["damage"],weapon["value"]))
+                print("%s) %s (damage: %s, price: %s)" % (counter, weapon["name"],
+                                                          weapon["damage"], weapon["value"]))
+                counter += 1
             print("%s) Back" % (len(weapons_for_sale) + 1))
             answer = int(input())
-            if answer in range(1, 6):  # shopkeeper sells 5 weapons per visit -> need implementing
+            if answer in range(len(weapons_for_sale) + 1):  # deducing one because of indexing
                 chosen_weapon = weapons_for_sale[answer - 1]  # deducting one because indexing
                 # starts from 0
+                logging.debug("Removing chosen weapon from shop's weapons list")
+                remove_weapon_from_shop_list(weapon=chosen_weapon)
+                initial_id = chosen_weapon["id"]
                 free_id = assign_free_id()
                 chosen_weapon["id"] = free_id
                 logging.debug("Assigning a new ID to the chosen weapon. New ID: %s" % free_id)
-                clear_weapons_shop_list_json()
-                buy_something(item=chosen_weapon, type_of_item="weapon")
+                if buy_something(item=chosen_weapon, type_of_item="weapon") is False:
+                    logging.debug("Bringing deleted weapon back to the shop list as player "
+                                  "didn't have enough gold for it")
+                    chosen_weapon["id"] = initial_id
+                    add_weapon_to_shop_list(weapon=chosen_weapon)
+                    shop_buy()
                 break
             elif answer == 6:
-                clear_weapons_shop_list_json()
                 shop_buy()
                 break
             else:
@@ -311,9 +318,12 @@ def buy_something(item, type_of_item):
         inventory.remove_item_from_inventory(item=gold)
         inventory.add_weapon_to_inventory(weapon=item, is_from_shop=True)
         shop_buy()
-    elif gold_check is False:
-        print("Not enough gold. Want to buy something else?")
+    elif gold_check is False and type_of_item != "weapon":
+        print("It seems that you cannot afford it... That's fine")
         shop_buy()
+    elif gold_check is False and type_of_item == "weapon":
+        print("It seems that you cannot afford it... That's fine")
+        return False
     else:
         inventory.remove_item_from_inventory(item=gold)
         inventory.add_item_to_inventory(item)
