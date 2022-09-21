@@ -3,7 +3,7 @@ from json import dumps
 import logging
 from colorama import Fore, Style, init
 from time import sleep
-import logging_on  # enables debug logs, requires file that is in git ignore
+#import logging_on  # enables debug logs, requires file that is in git ignore
 init() # without init, colorama doesnt seem to work in windows cmd
 
 working_dir = os.getcwd()
