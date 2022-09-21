@@ -20,7 +20,7 @@ def change_character_stat(character, stat, how_much, action):
                 creature[stat] = int(creature[stat] + how_much)
             else:
                 creature[stat] = int(creature[stat] - how_much)
-                if creature[stat] <= 0 and stat != "hp" or "xp":
+                if creature[stat] <= 0 and stat != "hp" and stat != "xp":
                     logging.debug("Rising %s to 1, because it cannot be lower than 1" % stat)
                     creature[stat] = 1
     dict_list = file_content
