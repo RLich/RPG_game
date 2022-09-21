@@ -20,7 +20,7 @@ def change_character_stat(character, stat, how_much, action):
                 creature[stat] = int(creature[stat] + how_much)
             else:
                 creature[stat] = int(creature[stat] - how_much)
-                if creature[stat] <= 0 and stat != "hp":
+                if creature[stat] <= 0 and stat != "hp" or "xp":
                     logging.debug("Rising %s to 1, because it cannot be lower than 1" % stat)
                     creature[stat] = 1
     dict_list = file_content
@@ -111,14 +111,11 @@ def check_if_level_up_ready():
         print(style_text(text="\nYou feel more experienced. A level has been gained",
                          style="bright"))
         sleep(0.5)
-        if character["xp"] > xp_to_lvl_up:
-            xp_to_adjust = character["xp"] - xp_to_lvl_up
-            logging.debug("Adjusting hero's xp to reflect the fact that more xp was gained than "
-                          "was needed to level up")
-            change_character_stat(
-                character=character, stat="xp", action="removing", how_much=xp_to_adjust)
         change_character_stat(
             character=character, stat="level", action="adding", how_much=1)
+        # returning xp to 0 at the end
+        change_character_stat(
+            character=character, stat="xp", action="removing", how_much=character["xp"])
         level_up(character=character)
 
 
