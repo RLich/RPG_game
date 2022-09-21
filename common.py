@@ -136,6 +136,7 @@ characters_list = [
         "str": 5,
         "int": 5,
         "mp": 10,
+        "speed": 5,
         "xp": 0,
         "level": 1,
         "max_mp": 10
@@ -147,6 +148,7 @@ characters_list = [
         "str": 5,
         "int": 3,
         "mp": 3,
+        "speed": 7,
         "weapon_dmg": 3,
         "xp": 5,
         "max_hp": 5
@@ -158,6 +160,7 @@ characters_list = [
         "str": 10,
         "int": 1,
         "mp": 1,
+        "speed": 2,
         "weapon_dmg": 0,
         "xp": 5,
         "max_hp": 12
@@ -169,6 +172,7 @@ characters_list = [
         "str": 7,
         "int": 5,
         "mp": 5,
+        "speed": 5,
         "weapon_dmg": 3,
         "xp": 5,
         "max_hp": 10
@@ -180,6 +184,7 @@ characters_list = [
         "str": 10,
         "int": 8,
         "mp": 8,
+        "speed": 5,
         "weapon_dmg": 5,
         "xp": 10,
         "max_hp": 15
@@ -191,6 +196,7 @@ characters_list = [
         "str": 10,
         "int": 10,
         "mp": 10,
+        "speed": 6,
         "weapon_dmg": 5,
         "xp": 10,
         "max_hp": 10
@@ -202,6 +208,7 @@ characters_list = [
         "str": 8,
         "int": 5,
         "mp": 5,
+        "speed": 4,
         "weapon_dmg": 8,
         "xp": 10,
         "max_hp": 12
@@ -213,6 +220,7 @@ characters_list = [
         "str": 7,
         "int": 5,
         "mp": 5,
+        "speed": 6,
         "weapon_dmg": 10,
         "xp": 15,
         "max_hp": 10
@@ -224,6 +232,7 @@ characters_list = [
         "str": 12,
         "int": 5,
         "mp": 5,
+        "speed": 5,
         "weapon_dmg": 7,
         "xp": 15,
         "max_hp": 22
@@ -235,6 +244,7 @@ characters_list = [
         "str": 20,
         "int": 5,
         "mp": 5,
+        "speed": 1,
         "weapon_dmg": 0,
         "xp": 15,
         "max_hp": 30

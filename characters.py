@@ -125,7 +125,7 @@ def check_if_level_up_ready():
 def level_up(character):
     while True:
         try:
-            stats_to_lvl_up = ["max_hp", "max_mp", "str", "int"]
+            stats_to_lvl_up = ["max_hp", "max_mp", "str", "int", "speed"]
             sleep(0.5)
             print("All this killing is finally paying off. What would you like to improve about "
                   "yourself?")
@@ -133,8 +133,10 @@ def level_up(character):
                   "\n2) 10 Mana (currently: %s)"
                   "\n3) 5 Strength (currently: %s)"
                   "\n4) 5 Intelligence (currently: %s)"
+                  "\n5) 5 Speed (currently: %s)"
                   % (character[stats_to_lvl_up[0]], character[stats_to_lvl_up[1]],
-                     character[stats_to_lvl_up[2]], character[stats_to_lvl_up[3]]))
+                     character[stats_to_lvl_up[2]], character[stats_to_lvl_up[3]], character[
+                         stats_to_lvl_up[4]]))
             answer = int(input(">"))
             if answer in range(1, 3):
                 change_character_stat(character=character, stat=(stats_to_lvl_up[answer-1]),
@@ -147,7 +149,7 @@ def level_up(character):
                     change_character_stat(character=character, stat="mp",
                                           how_much=10, action="adding")
                 break
-            elif answer in range(3, 5):
+            elif answer in range(3, 6):
                 change_character_stat(character=character, stat=(stats_to_lvl_up[answer-1]),
                                       how_much=5, action="adding")
                 break

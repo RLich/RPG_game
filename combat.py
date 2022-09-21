@@ -27,20 +27,40 @@ def turn(hero, enemy):
         print("\nTurn " + style_text(counter, style="bright") + " begins")
         print("%s HP: %s" % (style_text(hero["name"], style="bright"), hero["hp"]))
         print("%s HP: %s" % (style_text(enemy["name"], style="bright"), enemy["hp"]))
-        if choose_action(hero, enemy) is False:
-            return False  # returning False if player escaped combat
-        if is_enemy_dead(enemy) is True:
-            loot.loot_handling_after_combat(enemy)
-            break
-        enemy_action = enemy_choose_action()
-        counter += 1
-        if enemy_action == 1:
-            do_basic_attack(attacker=enemy, defender=hero)
-        if is_hero_dead() is True:
-            sleep(1)
-            print("Press any button to quit")
-            input(">")
-            quit()
+        if decide_if_hero_goes_first(hero=hero, enemy=enemy) is True:
+            print("\nInitiative is on your side")
+            if choose_action(hero, enemy) is False:
+                return False  # returning False if player escaped combat
+            if is_enemy_dead(enemy) is True:
+                loot.loot_handling_after_combat(enemy)
+                break
+            enemy_action = enemy_choose_action()
+            counter += 1
+            if enemy_action == 1:
+                do_basic_attack(attacker=enemy, defender=hero)
+            if is_hero_dead() is True:
+                sleep(1)
+                print("Press any button to quit")
+                input(">")
+                quit()
+        else:
+            print("\nYour enemy moves first")
+            enemy_action = enemy_choose_action()
+            counter += 1
+            if enemy_action == 1:
+                do_basic_attack(attacker=enemy, defender=hero)
+                print("You have %s health left" % get_character_from_character_list(
+                    file=file_characters, character_id=0)["hp"])
+            if is_hero_dead() is True:
+                sleep(1)
+                print("Press any button to quit")
+                input(">")
+                quit()
+            if choose_action(hero, enemy) is False:
+                return False  # returning False if player escaped combat
+            if is_enemy_dead(enemy) is True:
+                loot.loot_handling_after_combat(enemy)
+                break
 
 
 def choose_action(hero, enemy):
@@ -128,6 +148,14 @@ def calculate_damage(attacker):
         damage = 1
         logging.debug("Damage cannot be lower than 1. Adjusting")
     return damage
+
+
+def decide_if_hero_goes_first(hero, enemy):
+    roll_hero = randrange(1, 7)
+    roll_enemy = randrange(1, 7)
+    logging.debug("Initiative roll:\nHero: %s\nEnemy: %s" % (roll_hero, roll_enemy))
+    if roll_hero + hero["speed"] >= roll_enemy + enemy["speed"]:  # greater or equal :wink:
+        return True
 
 
 def is_hero_dead():

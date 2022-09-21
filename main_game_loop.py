@@ -15,7 +15,7 @@ def main_loop():
     reset_all_jsons()
     menu.main_menu()
     game_length = 15
-    game = 3
+    game = 1
     while game <= game_length:
         if enemy_encounter(counter=game, hero=get_character_from_character_list(
                 file=file_characters, character_id=0)) is False:  # it's false if player escaped
@@ -82,10 +82,11 @@ def after_combat_break():
                       "\nMana: %s/%s"
                       "\nStrength: %s"
                       "\nIntelligence: %s"
+                      "\nSpeed: %s"
                       "\nLevel: %s"
                       "\nExperience: %s/%s\n"
                       % (hero["hp"], hero["max_hp"], hero["mp"], hero["max_mp"], hero["str"],
-                         hero["int"], hero["level"], hero["xp"], hero["level"] * 10))
+                         hero["int"],hero["speed"], hero["level"], hero["xp"], hero["level"] * 10))
                 input("--Press any button to continue--")
             elif answer == 6:
                 weapons = get_inventory(file=file_weapons)
