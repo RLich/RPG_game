@@ -1,10 +1,11 @@
 import menu
+import logging
 from characters import choose_enemy_to_encounter, get_character_from_character_list, \
     file_characters, regenerate_after_combat, check_if_level_up_ready, change_character_stat
 from combat import fight
 from shop import shop_welcome
 from common import reset_all_jsons, print_error_out_of_options_scope, style_text, file_items, \
-    file_weapons, print_error_wrong_value
+    file_weapons, print_error_wrong_value, create_save_data
 from inventory import use_item, change_equipped_weapon, get_inventory
 from time import sleep
 from magic import cast_spell, get_spellbook
@@ -12,27 +13,34 @@ from items import populate_weapons_shop_list, clear_weapons_shop_list_json
 
 
 def main_loop():
-    reset_all_jsons()
-    menu.main_menu()
     game_length = 15
-    game = 1
+    reset_all_jsons()
+    main_menu_choice = menu.main_menu()
+    game = main_menu_choice[0]
+    game_skip = main_menu_choice[1]
     while game <= game_length:
-        if enemy_encounter(counter=game, hero=get_character_from_character_list(
-                file=file_characters, character_id=0)) is False:  # it's false if player escaped
-            game -= 1
-        check_if_level_up_ready()
-        sleep(1)
+        if game_skip == 1:
+            pass  # when loading a game, skips the enemy encounter so that player starts from the
+            # safe place instead of combat
+        else:
+            if enemy_encounter(counter=game, hero=get_character_from_character_list(
+                    file=file_characters, character_id=0)) is False:  # it's false if player escaped
+                game -= 1
+            check_if_level_up_ready()
+            sleep(1)
         after_combat_break()
         if game == 3 or game == 6 or game == 9 or game == 12:
             populate_weapons_shop_list()
             shop_welcome()
             clear_weapons_shop_list_json()
         game += 1
+        game_skip = 0  # sets this value to 0 to not skip the enemy encounter
     print("Congratulations, you have won the game. Feedback is welcomed :)")
 
 
 def enemy_encounter(counter, hero):
     while True:
+        logging.debug("!!!Game counter: %s" % counter)
         stage = determine_game_stage(counter)
         enemy = choose_enemy_to_encounter(stage=stage)
         print("You encounter " + style_text(enemy["name"], style="bright") + " on your path")
@@ -66,7 +74,8 @@ def after_combat_break():
                   "\n4) Cast a spell"
                   "\n5) Examine your character"
                   "\n6) Browse your inventory"
-                  "\n7) Browse your spellbook")
+                  "\n7) Browse your spellbook"
+                  "\n8) Save your progress")
             answer = int(input(">"))
             if answer == 1:
                 break
@@ -112,6 +121,8 @@ def after_combat_break():
                                                                          spell["power"],
                                                                          spell["mana_cost"]))
                 input("--Press any button to continue--")
+            elif answer == 8:
+                create_save_data()
             else:
                 print_error_out_of_options_scope()
         except ValueError:

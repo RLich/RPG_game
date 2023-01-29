@@ -9,7 +9,6 @@ from time import sleep
 def shop_encounter():
     while True:
         try:
-            shop_counter = 0
             print(
                 "\n- Welcome to my store, stranger. Would you like to buy or sell?"
                 "\n1) Buy"
@@ -25,12 +24,7 @@ def shop_encounter():
             elif answer == 3:
                 # leave by not doing anything
                 sleep(0.5)
-                if shop_counter > 0:
-                    # TODO implement bumping shop counter
-                    print("\nAfter concluding your business, you return on the road\n")
-                else:
-                    print("\nNot feeling in a mood for trading, you merely glance at the stacks of "
-                          "weapons and potions before returning to the world outside")
+                print("\nAfter concluding your business, you return on the road\n")
                 sleep(0.5)
                 break
             else:

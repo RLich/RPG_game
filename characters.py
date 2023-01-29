@@ -14,11 +14,13 @@ def change_character_stat(character, stat, how_much, action):
     file_content = json.loads(file.read())
     for creature in file_content:
         if creature["id"] == character["id"]:
-            logging.debug("Replacing old %s stat %s - %s with new stat - %s" % (
-                character["name"], stat, creature[stat], character[stat]))
             if action == "adding":
+                logging.debug("Replacing old %s stat %s - %s with new stat - %s" % (
+                    character["name"], stat, creature[stat], int(creature[stat] + how_much)))
                 creature[stat] = int(creature[stat] + how_much)
             else:
+                logging.debug("Replacing old %s stat %s - %s with new stat - %s" % (
+                    character["name"], stat, creature[stat], int(creature[stat] - how_much)))
                 creature[stat] = int(creature[stat] - how_much)
                 if creature[stat] <= 0 and stat != "hp" and stat != "xp":
                     logging.debug("Rising %s to 1, because it cannot be lower than 1" % stat)

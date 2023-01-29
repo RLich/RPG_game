@@ -3,10 +3,11 @@ from json import dumps
 import logging
 from colorama import Fore, Style, init
 from time import sleep
+import shutil
 #import logging_on  # enables debug logs, requires file that is in git ignore
-init() # without init, colorama doesnt seem to work in windows cmd
+init()  # without init, colorama doesnt seem to work in windows cmd
 
-working_dir = os.getcwd()
+working_dir = os.getcwd() + "\\"
 
 
 def print_error_out_of_options_scope():
@@ -130,6 +131,7 @@ weapons_list = [
 characters_list = [
     {
         "id": 0,
+        "game": 1,
         "name": "Hero",
         "hp": 20,
         "max_hp": 20,
@@ -252,13 +254,19 @@ characters_list = [
 ]
 
 current_enemy_list = "Place to do stuff to enemy in combat"
-
-file_characters = working_dir + "\\characters_list.json"
-file_spells = working_dir + "\\spells_list.json"
-file_weapons = working_dir + "\\weapons_list.json"
-file_items = working_dir + "\\items_list.json"
-file_shop_weapons = working_dir + "\\weapons_shop_list.json"
-file_current_enemy = working_dir + "\\current_enemy.json"
+files_list = ["characters_list.json",
+              "spells_list.json",
+              "weapons_list.json",
+              "items_list.json",
+              "weapons_shop_list.json",
+              "current_enemy.json"]
+file_characters = working_dir + files_list[0]
+file_spells = working_dir + files_list[1]
+file_weapons = working_dir + files_list[2]
+file_items = working_dir + files_list[3]
+file_shop_weapons = working_dir + files_list[4]
+file_current_enemy = working_dir + files_list[5]
+savegame = working_dir + "savegames\\"
 
 
 def reset_all_jsons():
@@ -275,3 +283,29 @@ def replace_file_content(file, content):
     with open(file, "w") as outfile:
         file_content = dumps(content, indent=4)
         outfile.write(file_content)
+
+
+def create_save_data():
+    print("Saving game...")
+    for file in files_list:
+        logging.debug("Copying json file %s to a savegame location" % file)
+        shutil.copy(working_dir + file, savegame)
+    sleep(1)
+    print("Game saved")
+
+
+def delete_save_data():
+    if os.path.exists(savegame + "\\weapons_list.json"):
+        for file in files_list:
+            logging.debug("Deleting json file %s from a savegame location" % file)
+            os.remove(savegame + file)
+
+
+def load_save_game():
+    if os.path.exists(savegame + "\\weapons_list.json"):
+        print("Loading game...")
+        for file in files_list:
+            logging.debug("Copying json file %s to a game location" % file)
+            shutil.copy(savegame + file, working_dir)
+        sleep(1)
+        print("Game loaded")

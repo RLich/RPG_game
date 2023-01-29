@@ -193,7 +193,6 @@ def replace_spell_quantity_in_spellbook(spell, action):
 
     with open(file_spells, "w") as outfile:
         outfile.write(file_content)
-    file.close()
     file_content = json.dumps(dict_list, indent=4)
     file.close()
 

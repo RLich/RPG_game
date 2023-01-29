@@ -2,7 +2,7 @@ from characters import change_character_stat, get_character_from_character_list,
     copy_enemy_to_current_enemy_json
 from random import choice, randrange
 from common import print_error_out_of_options_scope, color_text, style_text, file_characters, \
-    file_current_enemy, print_error_wrong_value
+    file_current_enemy, print_error_wrong_value, delete_save_data
 import inventory
 import loot
 import logging
@@ -39,6 +39,7 @@ def turn(hero, enemy):
             if enemy_action == 1:
                 do_basic_attack(attacker=enemy, defender=hero)
             if is_hero_dead() is True:
+                delete_save_data()
                 sleep(1)
                 print("Press any button to quit")
                 input(">")
@@ -52,6 +53,7 @@ def turn(hero, enemy):
                 print("You have %s health left" % get_character_from_character_list(
                     file=file_characters, character_id=0)["hp"])
             if is_hero_dead() is True:
+                delete_save_data()
                 sleep(1)
                 print("Press any button to quit")
                 input(">")
@@ -143,7 +145,8 @@ def calculate_damage(attacker):
     roll = choice([1, 2, 3, 4, 5, 6])
     damage = (roll + attacker["str"] + weapon_damage) - armor
     logging.debug("Calculating damage:\n   roll(d6): %s\n   strength: %s\n   weapon's damage: "
-                  "%s\n   armor: %s" % (roll, attacker["str"], weapon_damage, armor))
+                  "%s\n   armor: %s\nTotal damage: %s" % (roll, attacker["str"], weapon_damage,
+                                                          armor, damage))
     if damage <= 0:
         damage = 1
         logging.debug("Damage cannot be lower than 1. Adjusting")

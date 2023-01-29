@@ -1,18 +1,19 @@
 import common
 from time import sleep
-import magic
+from characters import get_character_from_character_list
+import magic  # leaving this import to stop import conflict
 
 
 def main_menu():
     welcome_message()
-    main_menu_options()
+    return main_menu_options()
 
 
 def welcome_message():
     print("Welcome to the game!\n"
           "Select the number from the list to proceed:\n"
           "1) Start a new adventure\n"
-          "2) Continue from the save file (not implemented yet)\n"
+          "2) Continue from the save file\n"
           "3) Exit")
 
 
@@ -23,11 +24,19 @@ def main_menu_options():
             if answer == 1:
                 print("A new adventure begins")
                 sleep(0.5)
-                break
-
+                game = 1
+                save_game_skip = 0  # determines if game should start from the beginning or in
+                # safe place
+                return game, save_game_skip
             elif answer == 2:
-                print("Not implemented yet")
-                sleep(1)
+                common.load_save_game()
+                hero = get_character_from_character_list(file=common.file_characters,
+                                                         character_id=0)
+                game = hero["game"]
+                print(game)
+                save_game_skip = 1  # determines if game should start from the beginning or in
+                # safe place
+                return game, save_game_skip
             elif answer == 3:
                 quit()
             else:

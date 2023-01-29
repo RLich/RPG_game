@@ -1,6 +1,7 @@
 [
     {
         "id": 0,
+        "game": 1,
         "name": "Hero",
         "hp": 20,
         "max_hp": 20,
