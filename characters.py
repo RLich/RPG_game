@@ -3,10 +3,10 @@ import logging
 from random import randrange
 from time import sleep
 from common import get_object_from_json_list_by_id, file_characters, file_current_enemy, \
-    print_error_out_of_options_scope, style_text, print_error_wrong_value
+    print_error_out_of_options_scope, style_text, print_error_wrong_value, player_input
 
 
-def change_character_stat(character, stat, how_much, action):
+def change_character_stat(character, stat, by_how_much, action):
     if character["name"] == "Hero":
         file = open(file_characters, "r")
     else:
@@ -16,12 +16,12 @@ def change_character_stat(character, stat, how_much, action):
         if creature["id"] == character["id"]:
             if action == "adding":
                 logging.debug("Replacing old %s stat %s - %s with new stat - %s" % (
-                    character["name"], stat, creature[stat], int(creature[stat] + how_much)))
-                creature[stat] = int(creature[stat] + how_much)
+                    character["name"], stat, creature[stat], int(creature[stat] + by_how_much)))
+                creature[stat] = int(creature[stat] + by_how_much)
             else:
                 logging.debug("Replacing old %s stat %s - %s with new stat - %s" % (
-                    character["name"], stat, creature[stat], int(creature[stat] - how_much)))
-                creature[stat] = int(creature[stat] - how_much)
+                    character["name"], stat, creature[stat], int(creature[stat] - by_how_much)))
+                creature[stat] = int(creature[stat] - by_how_much)
                 if creature[stat] <= 0 and stat != "hp" and stat != "xp":
                     logging.debug("Rising %s to 1, because it cannot be lower than 1" % stat)
                     creature[stat] = 1
@@ -65,7 +65,7 @@ def choose_enemy_to_encounter(stage):
 
 
 def regenerate_after_combat(character):
-    # Because we need an integer to calculate regeneration and we don't really care about
+    # Because we need an integer to calculate regeneration, and we don't really care about
     # whatever is after number's dot, we dispose of it by converting hp_to_regen to a string,
     # cutting of the after-dot-tail and swapping back to integer before using
     regen_rate = 0.1
@@ -84,11 +84,13 @@ def regenerate_after_combat(character):
         mp_to_regen = 0
 
     if hp_to_regen > 0:
-        print("\nRegenerating %s health after combat" % hp_to_regen)
-        change_character_stat(character=character, stat="hp", how_much=hp_to_regen, action="adding")
+        print("\nRegenerating %s health after combat (%s/%s)" %
+              (hp_to_regen, character["hp"] + hp_to_regen, character["max_hp"]))
+        change_character_stat(character=character, stat="hp", by_how_much=hp_to_regen, action="adding")
     if mp_to_regen > 0:
-        print("Regenerating %s mana after combat" % mp_to_regen)
-        change_character_stat(character=character, stat="mp", how_much=mp_to_regen, action="adding")
+        print("Regenerating %s mana after combat (%s/%s)" %
+              (mp_to_regen, character["mp"] + mp_to_regen, character["max_mp"]))
+        change_character_stat(character=character, stat="mp", by_how_much=mp_to_regen, action="adding")
 
 
 def copy_enemy_to_current_enemy_json(enemy):
@@ -110,14 +112,14 @@ def check_if_level_up_ready():
     character = get_character_from_character_list(file=file_characters, character_id=0)
     xp_to_lvl_up = 10 * character["level"]
     if character["xp"] >= xp_to_lvl_up:
-        print(style_text(text="\nYou feel more experienced. A level has been gained",
+        print(style_text(text="\nYou feel more experienced. You are now on a whole new level",
                          style="bright"))
         sleep(0.5)
         change_character_stat(
-            character=character, stat="level", action="adding", how_much=1)
+            character=character, stat="level", action="adding", by_how_much=1)
         # returning xp to 0 at the end
         change_character_stat(
-            character=character, stat="xp", action="removing", how_much=character["xp"])
+            character=character, stat="xp", action="removing", by_how_much=character["xp"])
         level_up(character=character)
 
 
@@ -126,31 +128,27 @@ def level_up(character):
         try:
             stats_to_lvl_up = ["max_hp", "max_mp", "str", "int", "speed"]
             sleep(0.5)
-            print("All this killing is finally paying off. What would you like to improve about "
-                  "yourself?")
-            print("1) 10 Health(currently: %s)"
-                  "\n2) 10 Mana (currently: %s)"
-                  "\n3) 5 Strength (currently: %s)"
-                  "\n4) 5 Intelligence (currently: %s)"
-                  "\n5) 5 Speed (currently: %s)"
-                  % (character[stats_to_lvl_up[0]], character[stats_to_lvl_up[1]],
-                     character[stats_to_lvl_up[2]], character[stats_to_lvl_up[3]], character[
-                         stats_to_lvl_up[4]]))
-            answer = int(input(">"))
+            dialog = "All this killing is finally paying off. What would you like to improve about yourself?"
+            options = ["10 Health(currently: %s)" % character[stats_to_lvl_up[0]],
+                       "10 Mana (currently: %s)" % character[stats_to_lvl_up[1]],
+                       "5 Strength (currently: %s)" % character[stats_to_lvl_up[2]],
+                       "5 Intelligence (currently: %s)" % character[stats_to_lvl_up[3]],
+                       "5 Speed (currently: %s)" % character[stats_to_lvl_up[4]]]
+            answer = player_input(dialog, options)
             if answer in range(1, 3):
-                change_character_stat(character=character, stat=(stats_to_lvl_up[answer-1]),
-                                      how_much=10, action="adding")
-                # adding 10 hp/mana so the leveled up stat's are not "empty"
+                change_character_stat(character=character, stat=(stats_to_lvl_up[answer - 1]),
+                                      by_how_much=10, action="adding")
+                # adding 10 hp/mana so the leveled up stats are not "empty"
                 if answer == 1:
                     change_character_stat(character=character, stat="hp",
-                                          how_much=10, action="adding")
+                                          by_how_much=10, action="adding")
                 else:
                     change_character_stat(character=character, stat="mp",
-                                          how_much=10, action="adding")
+                                          by_how_much=10, action="adding")
                 break
             elif answer in range(3, 6):
-                change_character_stat(character=character, stat=(stats_to_lvl_up[answer-1]),
-                                      how_much=5, action="adding")
+                change_character_stat(character=character, stat=(stats_to_lvl_up[answer - 1]),
+                                      by_how_much=5, action="adding")
                 break
             else:
                 print_error_out_of_options_scope()

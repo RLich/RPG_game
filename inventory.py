@@ -1,7 +1,7 @@
 import json
 import logging
 from common import get_object_from_json_list_by_id, print_error_out_of_options_scope, \
-    file_items, file_weapons, file_characters, print_error_wrong_value, style_text
+    file_items, file_weapons, file_characters, print_error_wrong_value, style_text, player_input
 from characters import change_character_stat, get_character_from_character_list
 from time import sleep
 
@@ -123,7 +123,7 @@ def get_equipped_weapon():
 
 
 def change_equipped_weapon():
-    # To change weapon into equipped weapon, swap it's ID with the current equipped weapon
+    # To change weapon into equipped weapon, swap its ID with the current equipped weapon
     equipped_weapon = get_equipped_weapon()
     while True:
         print("Currently you use: %s (%s damage)" %
@@ -198,35 +198,21 @@ def use_item(character):
 
 def choose_item_to_use():
     while True:
-        try:
-            print("Pick an item to use:")
-            items_list = get_inventory(file=file_items)
-            items_list.pop(0) # removing gold from the list of items available to use
-            item_counter = 1
-            available_items_id_list = []
-            used_counters = []
+        items_list = get_inventory(file=file_items)
+        dialog = "Pick an item to use:"
+        options = []
+        for item in items_list:
+            if item["id"] != 0 and item["quantity"] > 0:
+                options.append(item["name"])
+        options.append("Back")
+        answer = player_input(dialog, options)
+        back_index = int(len(items_list) + 1)
+        if answer == back_index:
+            return False
+        else:
+            item_to_return = get_item_from_inventory(file=file_items, item_id=answer)
+            return item_to_return
 
-            for item in items_list:
-                if item["id"] != 0 and item["quantity"] > 0:
-                    print("%s) %s" % (item_counter, item["name"]))
-                    available_items_id_list.append(item["id"])
-                    used_counters.append(item_counter)
-                    item_counter += 1
-            back_index = int(len(items_list) + 1)
-            print("%s) Back" % back_index)
-            answer = int(input(">"))
-            if answer in used_counters:
-                # we subtract one from the user's input because of python's indexing. User's choice
-                # of "1" is python's index of "0"
-                chosen_item_id = available_items_id_list[answer - 1]
-                chosen_item = get_item_from_inventory(file=file_items, item_id=chosen_item_id)
-                return chosen_item
-            elif answer == back_index:
-                return False
-            else:
-                print_error_out_of_options_scope()
-        except ValueError:
-            print_error_wrong_value()
 
 def drink_potion(character, item):
     if item["id"] == 1:
@@ -235,7 +221,7 @@ def drink_potion(character, item):
             item["restore"] = character["max_hp"] - character["hp"]
         print("Restoring %s health" % item["restore"])
         change_character_stat(
-            character=character, stat="hp", how_much=item["restore"], action="adding")
+            character=character, stat="hp", by_how_much=item["restore"], action="adding")
         character = get_character_from_character_list(file=file_characters,
                                                       character_id=0)
         print("Current health: %s/%s" % (character["hp"], character["max_hp"]))
@@ -245,7 +231,7 @@ def drink_potion(character, item):
             item["restore"] = character["max_mp"] - character["mp"]
         print("Restoring %s mana" % item["restore"])
         change_character_stat(
-            character=character, stat="mp", how_much=item["restore"], action="adding")
+            character=character, stat="mp", by_how_much=item["restore"], action="adding")
         character = get_character_from_character_list(file=file_characters,
                                                       character_id=0)
         print("Current mana: %s/%s" % (character["mp"], character["max_mp"]))

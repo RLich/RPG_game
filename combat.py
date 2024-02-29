@@ -2,7 +2,7 @@ from characters import change_character_stat, get_character_from_character_list,
     copy_enemy_to_current_enemy_json
 from random import choice, randrange
 from common import print_error_out_of_options_scope, color_text, style_text, file_characters, \
-    file_current_enemy, print_error_wrong_value, delete_save_data
+    file_current_enemy, print_error_wrong_value, delete_save_data, player_input
 import inventory
 import loot
 import logging
@@ -39,11 +39,9 @@ def turn(hero, enemy):
             if enemy_action == 1:
                 do_basic_attack(attacker=enemy, defender=hero)
             if is_hero_dead() is True:
-                delete_save_data()
-                sleep(1)
-                print("Press any button to quit")
-                input(">")
-                quit()
+                restart_if_desired()
+                break
+
         else:
             print("\nYour enemy moves first")
             enemy_action = enemy_choose_action()
@@ -53,11 +51,8 @@ def turn(hero, enemy):
                 print("You have %s health left" % get_character_from_character_list(
                     file=file_characters, character_id=0)["hp"])
             if is_hero_dead() is True:
-                delete_save_data()
-                sleep(1)
-                print("Press any button to quit")
-                input(">")
-                quit()
+                restart_if_desired()
+                break
             if choose_action(hero, enemy) is False:
                 return False  # returning False if player escaped combat
             if is_enemy_dead(enemy) is True:
@@ -65,16 +60,31 @@ def turn(hero, enemy):
                 break
 
 
+def restart_if_desired():
+    delete_save_data()
+    sleep(1)
+    dialog = "Restart the game?"
+    options = ["Yes", "No"]
+    answer = player_input(dialog, options)
+    if answer == 1:
+        from main_game_loop import main_loop
+        main_loop(restarted=True)
+    else:
+        quit()
+
+
 def choose_action(hero, enemy):
     while True:
         try:
             sleep(1)
-            print("\nChoose an action to perform:\n"
-                  "1) Attack with your weapon\n"
-                  "2) Cast a spell\n"
-                  "3) Use an item\n"
-                  "4) Try to retreat(50%)")
-            action = int(input(">"))
+            dialog = "Choose an action to perform:"
+            options = [
+                  "Attack with your weapon",
+                  "Cast a spell",
+                  "Use an item",
+                  "Try to retreat(50%)"
+            ]
+            action = player_input(dialog, options)
             if action == 1:
                 do_basic_attack(attacker=hero, defender=enemy)
                 break
@@ -131,7 +141,7 @@ def do_basic_attack(attacker, defender):
     print("\n%s dealt %s to %s" % (style_text(attacker["name"], style="bright"),
                                    color_text("%s physical damage" % damage, color="red"),
                                    style_text(defender["name"], style="bright")))
-    change_character_stat(character=defender, stat="hp", how_much=damage, action="removing")
+    change_character_stat(character=defender, stat="hp", by_how_much=damage, action="removing")
 
 
 def calculate_damage(attacker):

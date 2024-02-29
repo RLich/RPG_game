@@ -42,7 +42,7 @@ def weapon_damage_generator_adjective(adjective):
     elif adjective == "Mastercraft":
         weapon_mod_adjective += 4
     logging.debug("Adjusting weapon's damage by %s, because it's %s" % (weapon_mod_adjective,
-                                                                    adjective))
+                                                                        adjective))
     return weapon_mod_adjective
 
 
@@ -91,7 +91,7 @@ def assign_free_id():
         logging.debug("id_candidate %s taken. Weapons_id: %s" % (id_candidate, weapon_ids))
         id_candidate += 1
     logging.debug("Free id found. A new id_candidate created. New weapon will be assigned as id: %s"
-          % id_candidate)
+                  % id_candidate)
     return id_candidate
 
 
@@ -110,8 +110,8 @@ def create_weapon():
     weapon_adj_mod = weapon_damage_generator_adjective(name[1])
     weapon_type_mod = weapon_damage_generator_type(name[2])
     damage = weapon_damage_generator(
-            weapon_mod_adjective=weapon_adj_mod,
-            weapon_mod_type=weapon_type_mod)
+        weapon_mod_adjective=weapon_adj_mod,
+        weapon_mod_type=weapon_type_mod)
     weapon = Weapon(
         id=free_id,
         name=name[0],
