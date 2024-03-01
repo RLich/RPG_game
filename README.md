@@ -1,6 +1,6 @@
 # RPG_game
 
-Technical demo for yet-to-be-game. Hobby project :)
+Classic, siple RPG text game in Python
 
 How to play:
 Run "main_game_loop.py"
