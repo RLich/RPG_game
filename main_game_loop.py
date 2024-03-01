@@ -10,20 +10,20 @@ from inventory import use_item, change_equipped_weapon, get_inventory
 from time import sleep
 from magic import cast_spell, get_spellbook
 from items import populate_weapons_shop_list, clear_weapons_shop_list_json
+from settings import game_length
 
 
 def main_loop(restarted):
-    game_length = 15  # how many game encounters need to be defeated to win the game
     reset_all_jsons()
     if restarted is True:
         encounter_counter = 1
-        game_loaded = False
+        is_game_loaded_from_save = False
     else:
-        answer_main_menu = menu.main_menu()
+        answer_main_menu = menu.main_menu_options()
         encounter_counter = answer_main_menu[0]
-        game_loaded = answer_main_menu[1]
+        is_game_loaded_from_save = answer_main_menu[1]
     while encounter_counter <= game_length:
-        if game_loaded is True:
+        if is_game_loaded_from_save is True:
             pass  # when loading a game, skips the enemy encounter so that player starts from the
             # safe place instead of combat
         else:
@@ -38,7 +38,7 @@ def main_loop(restarted):
             shop_welcome()
             clear_weapons_shop_list_json()
         encounter_counter += 1
-        game_loaded = 0  # sets this value to 0 to not skip the enemy encounter
+        is_game_loaded_from_save = 0  # sets this value to 0 to not skip the enemy encounter
     print("Congratulations, you have won the game. Feedback is welcomed :)")
 
 

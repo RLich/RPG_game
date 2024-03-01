@@ -11,7 +11,7 @@ init()  # without init, colorama doesnt seem to work in windows cmd
 
 working_dir = os.getcwd() + "\\"
 json_files = working_dir + "jsons\\"
-savegame_path = working_dir + "savegames\\"
+save_game_path = working_dir + "savegames\\"
 
 
 def print_error_out_of_options_scope():
@@ -88,24 +88,24 @@ def create_save_data():
     print("Saving game...")
     for file in files_list:
         logging.debug("Copying json file %s to a savegame location" % file)
-        shutil.copy(json_files + file, savegame_path)
+        shutil.copy(json_files + file, save_game_path)
     sleep(1)
     print("Game saved")
 
 
 def delete_save_data():
-    if os.path.exists(savegame_path + "\\weapons_list.json"):
+    if os.path.exists(save_game_path + "\\weapons_list.json"):
         for file in files_list:
             logging.debug("Deleting json file %s from a savegame location" % file)
-            os.remove(savegame_path + file)
+            os.remove(save_game_path + file)
 
 
 def load_save_game():
-    if os.path.exists(savegame_path + "\\weapons_list.json"):
+    if os.path.exists(save_game_path + "\\weapons_list.json"):
         print("Loading game...")
         for file in files_list:
             logging.debug("Copying json file %s to a game location" % file)
-            shutil.copy(savegame_path + file, working_dir)
+            shutil.copy(save_game_path + file, working_dir)
         sleep(1)
         print("Game loaded")
 

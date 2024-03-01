@@ -2,10 +2,7 @@ from common import load_save_game, file_characters, player_input, clean_console_
 from time import sleep
 from characters import get_character_from_character_list
 import magic  # leaving this import to stop import conflict
-
-
-def main_menu():
-    return main_menu_options()
+from settings import game_length
 
 
 def main_menu_options():
@@ -18,7 +15,7 @@ def main_menu_options():
         ]
         answer = player_input(dialog, options)
         if answer == 1:
-            print("A new adventure begins")
+            print(f"A new adventure begins.\nDefeat {game_length} enemies to win. Good luck!")
             sleep(0.5)
             encounter_counter = 1
             game_loaded = False  # determines if game should start from the beginning or in
