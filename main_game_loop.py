@@ -4,8 +4,8 @@ from characters import choose_enemy_to_encounter, get_character_from_character_l
     file_characters, regenerate_after_combat, check_if_level_up_ready, change_character_stat
 from combat import fight
 from shop import shop_welcome
-from common import reset_all_jsons, print_error_out_of_options_scope, style_text, file_items, \
-    file_weapons, print_error_wrong_value, create_save_data, player_input
+from common import reset_all_jsons, style_text, file_items, \
+    file_weapons, create_save_data, player_input, delete_save_data
 from inventory import use_item, change_equipped_weapon, get_inventory
 from time import sleep
 from magic import cast_spell, get_spellbook
@@ -54,6 +54,8 @@ def enemy_encounter(counter, hero):
         regenerate_after_combat(character=get_character_from_character_list(
             file=file_characters, character_id=0))
         change_character_stat(character=hero, stat="xp", by_how_much=enemy["xp"], action="adding")
+        print("You have gained %s experience points (%s/%s)"
+              % (enemy["xp"], hero["xp"] + enemy["xp"], hero["level"] * 10))
         break
 
 
@@ -127,6 +129,19 @@ def after_combat_break():
             input("--Press any button to continue--")
         elif answer == 8:
             create_save_data()
+
+
+def restart_if_desired():
+    delete_save_data()
+    sleep(1)
+    dialog = "Restart the game?"
+    options = ["Yes", "No"]
+    answer = player_input(dialog, options)
+    if answer == 1:
+        from main_game_loop import main_loop
+        main_loop(restarted=True)
+    else:
+        quit()
 
 
 main_loop(restarted=False)
