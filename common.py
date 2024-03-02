@@ -84,7 +84,7 @@ def replace_file_content(file, content):
         outfile.write(file_content)
 
 
-def create_save_data():
+def save_game():
     print("Saving game...")
     for file in files_list:
         logging.debug("Copying json file %s to a savegame location" % file)

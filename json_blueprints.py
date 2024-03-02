@@ -199,5 +199,17 @@ characters_list = [
         "weapon_dmg": 0,
         "xp": 15,
         "max_hp": 30
+    },
+    {
+        "id": 10,
+        "name": "Big Bad Boss",
+        "hp": 100,
+        "str": 20,
+        "int": 10,
+        "mp": 5,
+        "speed": 3,
+        "weapon_dmg": 0,
+        "xp": 100,
+        "max_hp": 100
     }
 ]

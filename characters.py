@@ -56,8 +56,10 @@ def choose_enemy_to_encounter(stage):
         encountered_enemy_id = randrange(1, 4)
     elif stage == "mid":
         encountered_enemy_id = randrange(4, 7)
-    else:
+    elif stage == "late":
         encountered_enemy_id = randrange(7, 10)
+    else:
+        encountered_enemy_id = 10
     enemy = get_character_from_character_list(file=file_characters,
                                               character_id=encountered_enemy_id)
     file.close()

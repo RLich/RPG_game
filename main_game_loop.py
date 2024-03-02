@@ -5,7 +5,7 @@ from characters import choose_enemy_to_encounter, get_character_from_character_l
 from combat import fight
 from shop import shop_welcome
 from common import reset_all_jsons, style_text, file_items, \
-    file_weapons, create_save_data, player_input, delete_save_data
+    file_weapons, save_game, player_input, delete_save_data
 from inventory import use_item, change_equipped_weapon, get_inventory
 from time import sleep
 from magic import cast_spell, get_spellbook
@@ -64,6 +64,8 @@ def determine_game_stage(counter):
         stage = "early"
     elif counter in [4, 5, 6]:
         stage = "mid"
+    elif counter == 12:
+        stage = "end"
     else:
         stage = "late"
     return stage
@@ -81,9 +83,10 @@ def after_combat_break():
             "Examine your character",
             "Browse your inventory",
             "Browse your spellbook",
-            "Save your progress"]
+            "Save your progress and exit"]
         answer = player_input(dialog, options)
         if answer == 1:
+            save_game()
             break
         elif answer == 2:
             use_item(character=hero)
@@ -128,7 +131,8 @@ def after_combat_break():
                                                                      spell["mana_cost"]))
             input("--Press any button to continue--")
         elif answer == 8:
-            create_save_data()
+            save_game()
+            quit()
 
 
 def restart_if_desired():
