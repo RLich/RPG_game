@@ -108,6 +108,8 @@ def load_save_game():
             shutil.copy(save_game_path + file, working_dir)
         sleep(1)
         print("Game loaded")
+    else:
+        return False
 
 
 def player_action_choice():

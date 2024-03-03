@@ -16,6 +16,7 @@ from settings import game_length
 def main_loop(restarted):
     reset_all_jsons()
     if restarted is True:
+        print(f"A new adventure begins.\nDefeat {game_length} enemies to win. Good luck!")
         encounter_counter = 1
         is_game_loaded_from_save = False
     else:
@@ -146,5 +147,3 @@ def restart_if_desired():
     else:
         quit()
 
-
-main_loop(restarted=False)
