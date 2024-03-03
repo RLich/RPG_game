@@ -142,7 +142,6 @@ def restart_if_desired():
     options = ["Yes", "No"]
     answer = player_input(dialog, options)
     if answer == 1:
-        from main_game_loop import main_loop
         main_loop(restarted=True)
     else:
         quit()
