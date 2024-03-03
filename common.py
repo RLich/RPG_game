@@ -86,10 +86,14 @@ def replace_file_content(file, content):
 
 def save_game():
     print("Saving game...")
+    if os.path.isdir(save_game_path) is False:
+        os.mkdir(save_game_path)
     for file in files_list:
+        if os.path.isfile(save_game_path + file) is False:
+            open(save_game_path + file, "x")
         logging.debug("Copying json file %s to a savegame location" % file)
         shutil.copy(json_files + file, save_game_path)
-    sleep(1)
+    sleep(0.5)
     print("Game saved")
 
 
@@ -110,14 +114,6 @@ def load_save_game():
         print("Game loaded")
     else:
         return False
-
-
-def player_action_choice():
-    dialog = "\nSelect your action:"
-    options = ["Construct a building", "Inspect your buildings", "Recruit soldiers",
-               "Inspect your troops", "End your turn"]
-    answer = player_input(dialog, options)
-    return answer
 
 
 def player_input(dialog, options):
