@@ -84,7 +84,7 @@ def replace_file_content(file, content):
         outfile.write(file_content)
 
 
-def create_save_data():
+def save_game():
     print("Saving game...")
     for file in files_list:
         logging.debug("Copying json file %s to a savegame location" % file)
@@ -108,6 +108,8 @@ def load_save_game():
             shutil.copy(save_game_path + file, working_dir)
         sleep(1)
         print("Game loaded")
+    else:
+        return False
 
 
 def player_action_choice():
@@ -119,6 +121,8 @@ def player_action_choice():
 
 
 def player_input(dialog, options):
+    """""Returns the answer for the player input. It takes into account the indexing, so there is no need for additional
+    adding +1 to the return in the calling function"""
     number_of_options = len(options)
     while True:
         print(dialog)

@@ -192,7 +192,6 @@ def use_item(character):
             elif item["id"] == 2 and character["mp"] == character["max_mp"]:
                 print("Your mana is already full")
             else:
-                drink_potion(character=character, item=item)
                 break
 
 
@@ -206,8 +205,7 @@ def choose_item_to_use():
                 options.append(item["name"])
         options.append("Back")
         answer = player_input(dialog, options)
-        back_index = int(len(items_list) + 1)
-        if answer == back_index:
+        if answer == len(options):
             return False
         else:
             item_to_return = get_item_from_inventory(file=file_items, item_id=answer)

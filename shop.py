@@ -43,9 +43,9 @@ def shop_buy():
     while True:
         dialog = '"What can I interest you with?'
         options = [
-            "Supplies,"
-            "Weapons,"
-            "Spells,"
+            "Supplies",
+            "Weapons",
+            "Spells",
             "Back"
         ]
         answer = common.player_input(dialog, options)
@@ -140,8 +140,8 @@ def shop_supplies():
     while True:
         dialog = '"Here are my wares:"'
         options = [
-            "Health potion (10g)"
-            "Mana potion (10g)"
+            "Health potion (10g)",
+            "Mana potion (10g)",
             "Back"
         ]
         answer = common.player_input(dialog, options)
