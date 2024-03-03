@@ -119,6 +119,8 @@ def player_action_choice():
 
 
 def player_input(dialog, options):
+    """""Returns the answer for the player input. It takes into account the indexing, so there is no need for additional
+    adding +1 to the return in the calling function"""
     number_of_options = len(options)
     while True:
         print(dialog)
