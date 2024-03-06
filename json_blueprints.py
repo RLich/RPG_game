@@ -203,7 +203,7 @@ characters_list = [
     {
         "id": 10,
         "name": "Big Bad Boss",
-        "hp": 100,
+        "hp": 50,
         "str": 20,
         "int": 10,
         "mp": 5,
